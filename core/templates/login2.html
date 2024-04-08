@@ -1,0 +1,15 @@
+{% extends 'base-outer.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <h1>Login</h1>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div>
+            <button type="submit">Login</button>
+            </div>
+            <a href="{% url 'signup' %}">Don't have an account? Create one</a>
+        </form>
+    </div>
+{% endblock %}

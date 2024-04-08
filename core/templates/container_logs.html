@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="main-panel">
+    <div class="content">
+        <div class="container-fluid">
+            <h4 class="page-title">Logs Table</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Table Head States</div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SNo.</th>
+                                        <th scope="col">Length</th>
+                                        <th scope="col">Girth</th>
+                                        <th scope="col">CFT/CBM</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in logs %}
+                                    <tr>
+                                        <td>{{ log.id }}</td>
+                                        <td>{{ log.length }}</td>
+                                        <td>{{ log.girth }}</td>
+                                        <td>{{ log.cft_cbm }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

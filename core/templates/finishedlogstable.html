@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-panel">
+    <div class="content">
+        <div class="container-fluid">
+            <h4 class="page-title">Finished Log Info</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                       <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">S No.</th>
+                                            <th scope="col">Length</th>
+                                            <th scope="col">Width</th>
+                                            <th scope="col">Thickness</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for f_log in finishedlog %}
+                                        <tr>
+                                            <td>{{ f_log.id }}</td>
+                                            <td>{{ f_log.length }}</td>
+                                            <td>{{ f_log.width }}</td>
+                                            <td>{{ f_log.thickness }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="text-center">No data available</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

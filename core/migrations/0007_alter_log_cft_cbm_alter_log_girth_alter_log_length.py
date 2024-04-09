@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0006_alter_container_amount_rename_logsinfo_log_and_more'),
+        ("core", "0006_alter_container_amount_rename_logsinfo_log_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='log',
-            name='cft_cbm',
+            model_name="log",
+            name="cft_cbm",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=20),
         ),
         migrations.AlterField(
-            model_name='log',
-            name='girth',
+            model_name="log",
+            name="girth",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=20),
         ),
         migrations.AlterField(
-            model_name='log',
-            name='length',
+            model_name="log",
+            name="length",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=20),
         ),
     ]

@@ -6,23 +6,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0009_alter_log_cft_cbm_alter_log_girth_alter_log_length'),
+        ("core", "0009_alter_log_cft_cbm_alter_log_girth_alter_log_length"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='finishedlog',
-            name='height',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=20, null=True),
+            model_name="finishedlog",
+            name="height",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=0, max_digits=20, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='finishedlog',
-            name='length',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=20, null=True),
+            model_name="finishedlog",
+            name="length",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=0, max_digits=20, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='finishedlog',
-            name='width',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=20, null=True),
+            model_name="finishedlog",
+            name="width",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=0, max_digits=20, null=True
+            ),
         ),
     ]

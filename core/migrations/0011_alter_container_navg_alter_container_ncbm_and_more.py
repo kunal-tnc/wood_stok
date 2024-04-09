@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0010_alter_finishedlog_height_alter_finishedlog_length_and_more'),
+        ("core", "0010_alter_finishedlog_height_alter_finishedlog_length_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='container',
-            name='navg',
+            model_name="container",
+            name="navg",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=20),
         ),
         migrations.AlterField(
-            model_name='container',
-            name='ncbm',
+            model_name="container",
+            name="ncbm",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=20),
         ),
         migrations.AlterField(
-            model_name='container',
-            name='pieces',
+            model_name="container",
+            name="pieces",
             field=models.IntegerField(default=0),
         ),
         migrations.AlterField(
-            model_name='container',
-            name='rate',
+            model_name="container",
+            name="rate",
             field=models.IntegerField(default=0),
         ),
     ]

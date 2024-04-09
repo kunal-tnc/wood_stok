@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0011_alter_container_navg_alter_container_ncbm_and_more'),
+        ("core", "0011_alter_container_navg_alter_container_ncbm_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='container',
-            name='container_number',
+            model_name="container",
+            name="container_number",
             field=models.CharField(max_length=50, unique=True),
         ),
     ]

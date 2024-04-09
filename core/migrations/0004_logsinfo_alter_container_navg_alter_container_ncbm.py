@@ -6,27 +6,35 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_vendor_container_vendor'),
+        ("core", "0003_vendor_container_vendor"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='LogsInfo',
+            name="LogsInfo",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('length', models.DecimalField(decimal_places=2, max_digits=20)),
-                ('girth', models.DecimalField(decimal_places=2, max_digits=20)),
-                ('cft_cbm', models.DecimalField(decimal_places=2, max_digits=20)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("length", models.DecimalField(decimal_places=2, max_digits=20)),
+                ("girth", models.DecimalField(decimal_places=2, max_digits=20)),
+                ("cft_cbm", models.DecimalField(decimal_places=2, max_digits=20)),
             ],
         ),
         migrations.AlterField(
-            model_name='container',
-            name='navg',
+            model_name="container",
+            name="navg",
             field=models.DecimalField(decimal_places=2, max_digits=20),
         ),
         migrations.AlterField(
-            model_name='container',
-            name='ncbm',
+            model_name="container",
+            name="ncbm",
             field=models.DecimalField(decimal_places=2, max_digits=20),
         ),
     ]

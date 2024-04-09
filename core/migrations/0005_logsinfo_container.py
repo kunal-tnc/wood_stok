@@ -7,14 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0004_logsinfo_alter_container_navg_alter_container_ncbm'),
+        ("core", "0004_logsinfo_alter_container_navg_alter_container_ncbm"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='logsinfo',
-            name='container',
-            field=models.ForeignKey(default=2, on_delete=django.db.models.deletion.CASCADE, to='core.container'),
+            model_name="logsinfo",
+            name="container",
+            field=models.ForeignKey(
+                default=2,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.container",
+            ),
             preserve_default=False,
         ),
     ]

@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0015_log_reference_id'),
+        ("core", "0015_log_reference_id"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='finishedlog',
-            name='reference_id',
+            model_name="finishedlog",
+            name="reference_id",
             field=models.IntegerField(default=0),
         ),
         migrations.AlterField(
-            model_name='log',
-            name='reference_id',
+            model_name="log",
+            name="reference_id",
             field=models.IntegerField(default=0),
         ),
     ]

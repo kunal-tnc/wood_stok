@@ -1,67 +1,63 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
 
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const containerId = button.dataset.containerId;
+            const csrfToken = button.dataset.csrfToken;
 
-document.addEventListener('DOMContentLoaded', function () {
-		const deleteButtons = document.querySelectorAll('.delete-button');
-		console.log("check")
+            bootbox.confirm({
+                message: "Are you sure you want to delete this record?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-danger'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-secondary'
+                    }
+                },
+                callback: function(result) {
+                    if (result) {
+                        fetch('/container/' + containerId + '/delete/', {
+                                method: 'DELETE', // Specify the method as DELETE
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrfToken
+                                },
+                                body: JSON.stringify({
+                                    id: containerId
+                                })
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    location.reload();
+                                } else {
+                                    console.error('Error deleting record');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error deleting record:', error);
+                            });
 
-		deleteButtons.forEach(button => {
-			button.addEventListener('click', function (event) {
-				event.preventDefault();
-				const containerId = button.dataset.containerId;
-				const csrfToken = button.dataset.csrfToken;
-
-				bootbox.confirm({
-					message: "Are you sure you want to delete this record?",
-					buttons: {
-						confirm: {
-							label: 'Yes',
-							className: 'btn-danger'
-						},
-						cancel: {
-							label: 'No',
-							className: 'btn-secondary'
-						}
-					},
-					callback: function (result) {
-						if (result) {
-							// If the user confirms, make an AJAX request to delete the record
-							fetch('/container/' + containerId + '/delete/', {
-								method: 'DELETE', // Specify the method as DELETE
-								headers: {
-									'Content-Type': 'application/json',
-									'X-CSRFToken': csrfToken
-								},
-								body: JSON.stringify({ id: containerId })
-							})
-							.then(response => {
-								if (response.ok) {
-									// Reload the page after successful deletion
-									location.reload();
-								} else {
-									// Handle error response
-									console.error('Error deleting record');
-								}
-							})
-							.catch(error => {
-								console.error('Error deleting record:', error);
-							});
-
-						}
-					}
-				});
-			});
-		});
-	});
+                    }
+                }
+            });
+        });
+    });
+});
 
 //	2nd script started
-var count=0;
-	var f_logs = []
-	$(document).ready(function() {
-	    $('#myTable').DataTable();
-	});
-    $(document).on('click', '#add-more', function(){
-        count+=1
-        var dynamicRow = `
+var count = 0;
+var f_logs = []
+$(document).ready(function() {
+    $('#myTable').DataTable();
+});
+$(document).on('click', '#add-more', function() {
+    count += 1
+    var dynamicRow = `
         <tr>
             <td>#</td>
             <td><input type="number" class="form-control td-length" name="length" id="#${count}length" step="0.25" min="0" required></td>
@@ -71,101 +67,105 @@ var count=0;
             <td><a href="#"><i class="fa fa-trash delete-row"/></a></td>
         </tr>
         `;
-        $("#add-more-tr").before(dynamicRow);
-    });
-	   $(document).on('click', '.delete-row', function() {
-		let finishLogId = $(this).data('finish-log-id');
+    $("#add-more-tr").before(dynamicRow);
+});
+$(document).on('click', '.delete-row', function() {
+    let finishLogId = $(this).data('finish-log-id');
 
-		for (let i = f_logs.length - 1; i >= 0; i--) {
-			if (f_logs[i] === finishLogId) {
-				f_logs.splice(i, 1);
-			}
-		}
+    for (let i = f_logs.length - 1; i >= 0; i--) {
+        if (f_logs[i] === finishLogId) {
+            f_logs.splice(i, 1);
+        }
+    }
 
-		if (finishLogId !== undefined) {
-			$.ajax({
-				url: "/finishedlogs/delete/",
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-CSRFToken': csrfToken
-				},
-				data: JSON.stringify({ 'fin_log_id': finishLogId }),
-				success: function(response) {
+    if (finishLogId !== undefined) {
+        $.ajax({
+            url: "/finishedlogs/delete/",
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            data: JSON.stringify({
+                'fin_log_id': finishLogId
+            }),
+            success: function(response) {
 
-				},
-				error: function(xhr, status, error) {
+            },
+            error: function(xhr, status, error) {
 
-				}
-			});
-		}
-
-		$(this).closest('tr').remove();
-	});
+            }
+        });
+    }
+    count -= 1;
+    $(this).closest('tr').remove();
+});
 
 //	3rd script started
 document.addEventListener('DOMContentLoaded', () => {
-  const saveBtn = document.getElementById('save-table-data');
-  if (saveBtn) {
-    saveBtn.addEventListener('click', async () => {
-      try {
-        const formData = new FormData(document.getElementById('table-data'));
-        const jsonData = {};
-        var cont_id = $('#cont_id').val();
+    const saveBtn = document.getElementById('save-table-data');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+            try {
+                const formData = new FormData(document.getElementById('table-data'));
+                const jsonData = {};
+                var cont_id = $('#cont_id').val();
 
-        for (const [key, value] of formData.entries()) {
-          if (key.startsWith('log_')) {
-            const logKey = key.replace('log_', '');
-            if (jsonData[logKey]) {
-              if (!Array.isArray(jsonData[logKey])) {
-                jsonData[logKey] = [jsonData[logKey]];
-              }
-              jsonData[logKey].push(value);
-            } else {
-              jsonData[logKey] = value;
+                for (const [key, value] of formData.entries()) {
+                    if (key.startsWith('log_')) {
+                        const logKey = key.replace('log_', '');
+                        if (jsonData[logKey]) {
+                            if (!Array.isArray(jsonData[logKey])) {
+                                jsonData[logKey] = [jsonData[logKey]];
+                            }
+                            jsonData[logKey].push(value);
+                        } else {
+                            jsonData[logKey] = value;
+                        }
+                    }
+                }
+                jsonData['cont_id'] = $('#cont_id').val();
+                const response = await fetch('/logs/update/', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify(jsonData),
+                    cont_id: cont_id
+                });
+
+                if (response.ok) {
+                    bootbox.alert('Data Update Successfully');
+
+                } else {
+                    console.error('Failed to send data to log_update');
+                }
+            } catch (error) {
+                console.error('Error sending data to log_update:', error);
             }
-          }
-        }
-        jsonData['cont_id']=$('#cont_id').val();
-        const response = await fetch('/logs/update/', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-          },
-          body: JSON.stringify(jsonData),
-          cont_id: cont_id
         });
-
-        if (response.ok) {
-          bootbox.alert('Data Update Successfully');
-
-        } else {
-          console.error('Failed to send data to log_update');
-        }
-      } catch (error) {
-        console.error('Error sending data to log_update:', error);
-      }
-    });
-  } else {
-    console.error('Element with ID "save-table-data" not found');
-  }
+    } else {
+        console.error('Element with ID "save-table-data" not found');
+    }
 });
 
 //  4th script started
 var activate_log_id
-	$(document).on('click', '#f_log', function() {
+$(document).on('click', '#f_log', function() {
     const log_id = $(this).val();
-    activate_log_id=log_id
+    activate_log_id = log_id
     $("#log").val(log_id);
     const table = document.getElementById('finished-row-table');
     $("#finished-row-table tr:not(:first-child):not(tfoot tr)").remove();
 
     $.ajax({
-        data: { 'log_id': log_id },
+        data: {
+            'log_id': log_id
+        },
         url: "/finishedlog/",
         success: function(response) {
-			f_logs=[]
+            f_logs = []
             for (var i = 0; i < response.length; i++) {
 
                 var dynamicRow = `
@@ -178,7 +178,7 @@ var activate_log_id
                         <td><a href="#" class="delete-row" data-finish-log-id="${response[i]['id']}"><i class="fa fa-trash"></i></a></td>
                     </tr>
                 `;
-					f_logs.push(response[i]['id'])
+                f_logs.push(response[i]['id'])
                 $("#finished-row-table").append(dynamicRow);
             }
 
@@ -186,14 +186,14 @@ var activate_log_id
     });
 });
 // 5th script started
-$(document).ready(function(){
-        log_exixts=document.getElementById("log_exists").value
+$(document).ready(function() {
+    log_exixts = document.getElementById("log_exists").value
 
-        if (log_exixts=='True'){
+    if (log_exixts == 'True') {
         logsExistselement = document.getElementById("logsExists")
         logsExistselement.setAttribute("hidden", true);
-        }
-    })
+    }
+})
 //    6th script started
 document.getElementById("Fform").addEventListener("submit", function(event) {
     event.preventDefault();
@@ -204,16 +204,29 @@ document.getElementById("Fform").addEventListener("submit", function(event) {
         var f_width = document.getElementById(`${f_logs[i]}width`).value;
         var f_thickness = document.getElementById(`${f_logs[i]}thickness`).value;
         var f_cft = document.getElementById(`${f_logs[i]}cft`).value;
-        var finished_log_dict = {'id': f_logs[i], 'length': f_length, 'width': f_width, 'thickness': f_thickness, 'cft':f_cft};
+        var finished_log_dict = {
+            'id': f_logs[i],
+            'length': f_length,
+            'width': f_width,
+            'thickness': f_thickness,
+            'cft': f_cft
+        };
         finished_log.push(finished_log_dict);
     }
 
     for (var i = 1; i <= count; i++) {
+
         var f_length = document.getElementById(`#${i}length`).value;
         var f_width = document.getElementById(`#${i}width`).value;
         var f_thickness = document.getElementById(`#${i}thickness`).value;
         var f_cft = document.getElementById(`#${i}cft`).value;
-        var finished_log_dict = {'id': "#", 'length': f_length, 'width': f_width, 'thickness': f_thickness, 'cft':f_cft};
+        var finished_log_dict = {
+            'id': "#",
+            'length': f_length,
+            'width': f_width,
+            'thickness': f_thickness,
+            'cft': f_cft
+        };
         finished_log.push(finished_log_dict);
     }
 
@@ -225,7 +238,10 @@ document.getElementById("Fform").addEventListener("submit", function(event) {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrfToken
         },
-        data: JSON.stringify({'log_id': activate_log_id, 'finished_log': finished_log}),
+        data: JSON.stringify({
+            'log_id': activate_log_id,
+            'finished_log': finished_log
+        }),
         success: function(response) {
             $("#LogModalclose").click();
         }
@@ -239,80 +255,73 @@ $(document).on('change', '.td-length, .td-width, .td-thickness', function() {
     var width = parseFloat($tr.find('.td-width').val());
     var thickness = parseFloat($tr.find('.td-thickness').val());
 
-    console.log('Length:', length);
-    console.log('Width:', width);
-    console.log('Thickness:', thickness);
-
     var cft = (length * width * thickness) / 144;
-
-    console.log('CFT:', cft);
 
     $tr.find('.td-cft').val(cft.toFixed(2));
 });
 //    7th script started
-    $(document).ready(function() {
-        // Function to calculate CFT and CBM
-        function calculateVolume() {
-            var conversionFactor = 35.3147;
-            var length = parseFloat($('#lengthInput').val());
-            var girth = parseFloat($('#girthInput').val());
+$(document).ready(function() {
+    // Function to calculate CFT and CBM
+    function calculateVolume() {
+        var conversionFactor = 35.3147;
+        var length = parseFloat($('#lengthInput').val());
+        var girth = parseFloat($('#girthInput').val());
 
 
 
-            // Calculate CBM
-            var cbm = (girth * girth * length) / 16;
-            var cft = cbm * conversionFactor
-            cbm = cbm.toFixed(2);
-            $('#cftInput').val(cft.toFixed(2));
-            $('#cbmInput').val(cbm);
-        }
+        // Calculate CBM
+        var cbm = (girth * girth * length) / 16;
+        var cft = cbm * conversionFactor
+        cbm = cbm.toFixed(2);
+        $('#cftInput').val(cft.toFixed(2));
+        $('#cbmInput').val(cbm);
+    }
 
-        // Calculate volume when length or girth input changes
-        $('#lengthInput, #girthInput').on('change', calculateVolume);
+    $('#lengthInput, #girthInput').on('change', calculateVolume);
 
-        // Event listener for form submission
-        $('#logForm').submit(function(event) {
-            event.preventDefault();
-            calculateVolume();
+    // Event listener for form submission
+    $('#logForm').submit(function(event) {
+        event.preventDefault();
+        calculateVolume();
 
-            var formData = $(this).serialize();
-            var cont_id = $('#cont_id').val();
+        var formData = $(this).serialize();
+        var cont_id = $('#cont_id').val();
 
-            $.ajax({
-                url: "/single_logs_form/",
-                method: 'POST',
-                data: formData,
-                container: cont_id,
-                success: function(response) {
-                    if (response.success) {
-                        bootbox.alert({
-                            message: response.message,
-                            callback: function() {
-                                $('#newLogModal').modal('hide');
-                                location.reload();
-                            }
-                        });
-                    } else {
-                        bootbox.alert('Error: ' + response.errors);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    bootbox.alert('Error: ' + xhr.responseText);
+        $.ajax({
+            url: "/single_logs_form/",
+            method: 'POST',
+            data: formData,
+            container: cont_id,
+            success: function(response) {
+                if (response.success) {
+                    bootbox.alert({
+                        message: response.message,
+                        callback: function() {
+                            $('#newLogModal').modal('hide');
+                            location.reload();
+                        }
+                    });
+                } else {
+                    bootbox.alert('Error: ' + response.errors);
                 }
-            });
-        });
-
-        // Reset form fields when modal is hidden
-        $('#newLogModal').on('hidden.bs.modal', function() {
-            $('#logForm')[0].reset();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                bootbox.alert('Error: ' + xhr.responseText);
+            }
         });
     });
+
+    // Reset form fields when modal is hidden
+    $('#newLogModal').on('hidden.bs.modal', function() {
+        $('#logForm')[0].reset();
+    });
+});
 //  8th scripted started
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const deleteButtons = document.querySelectorAll('.delete-log-button');
     deleteButtons.forEach(button => {
-        button.addEventListener('click', function (event) {
+        button.addEventListener('click', function(event) {
             event.preventDefault();
             const logId = button.dataset.logId;
             const csrfToken = button.dataset.csrfToken;
@@ -328,17 +337,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         className: 'btn-secondary'
                     }
                 },
-                callback: function (result) {
+                callback: function(result) {
                     if (result) {
 
                         fetch('/container/log/' + logId + '/delete/', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': csrfToken
-                            },
-                            body: JSON.stringify({ id: logId })
-                        })
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrfToken
+                                },
+                                body: JSON.stringify({
+                                    id: logId
+                                })
+                            })
                             .then(response => {
                                 if (response.ok) {
 
@@ -358,27 +369,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 //  9th scripted started
-    $(document).ready(function() {
-        $('#myTable').DataTable();
-    });
+$(document).ready(function() {
+    $('#myTable').DataTable();
+});
 //  10th scripted started
 
 $(document).on('click', '#tab3-tab', function() {
 
-var cont_id = $('#cont_id').val();
+    var cont_id = $('#cont_id').val();
 
-$("#finished_log_table tr:not(:first-child)").remove();
-$.ajax({
-            url: "/finished-logs/",
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken
-            },
-            data: { 'cont_id': cont_id },
-            success: function(response) {
+    $("#finished_log_table tr:not(:first-child)").remove();
+    $.ajax({
+        url: "/finished-logs/",
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        data: {
+            'cont_id': cont_id
+        },
+        success: function(response) {
 
-             for (var i = 0; i < response.length; i++) {
+            for (var i = 0; i < response.length; i++) {
                 var dynamicRow = `
                     <tr>
                         <td>${response[i]['log_no']}</td>
@@ -391,74 +404,33 @@ $.ajax({
                 `;
                 $("#finished_log_table").append(dynamicRow);
             }
-            }
-        });
+        }
+    });
 });
- // Calculate cft and cbm
-$(document).on('change', '.length-input, .girth-input', function(){
-	var $tr = $(this).closest('tr');
-	var conversionFactor = 35.3147;
- 	var length = parseFloat($tr.find('.length-input').val());
- 	var girth = parseFloat($tr.find('.girth-input').val());
+
+//  11th scripted started
+// Calculate cft and cbm for data update case
+$(document).on('change', '.length-input, .girth-input', function() {
+    var $tr = $(this).closest('tr');
+    var conversionFactor = 35.3147;
+    var length = parseFloat($tr.find('.length-input').val());
+    var girth = parseFloat($tr.find('.girth-input').val());
 
 
-	var cbm = (girth * girth * length) / 16;
-	var cft = cbm * conversionFactor
-	$tr.find('.cft-input').val(cft.toFixed(2));
-	$tr.find('.cbm-input').val(cbm.toFixed(2));
+    var cbm = (girth * girth * length) / 16;
+    var cft = cbm * conversionFactor
+    $tr.find('.cft-input').val(cft.toFixed(2));
+    $tr.find('.cbm-input').val(cbm.toFixed(2));
 })
 
+document.addEventListener('DOMContentLoaded', () => {
+    const containerInfoLink = document.getElementById('tab1-tab');
 
-//  12th scripted started
-//
-//document.addEventListener('DOMContentLoaded', function() {
-//    // Function to calculate total CBM
-//    function calculateTotalCBM() {
-//        var logs = document.querySelectorAll('.log-row');
-//        var totalCBM = 0;
-//
-//        logs.forEach(function(log) {
-//            var cbmInput = log.querySelector('.cbm-input');
-//            if (cbmInput.value.trim() !== '') {
-//                totalCBM += parseFloat(cbmInput.value);
-//            }
-//        });
-//
-//        document.getElementById('totalCBM').textContent = totalCBM.toFixed(2);
-//    }
-//
-//    // Function to calculate total number of log rows
-//    function calculateTotalLogRows() {
-//        var logs = document.querySelectorAll('.log-row');
-//        return logs.length;
-//    }
-//
-//    // Function to calculate net average
-//    function calculateNetAvg() {
-//        var logs = document.querySelectorAll('.log-row');
-//        var totalCBM = 0;
-//        var totalLogRows = logs.length;
-//
-//        logs.forEach(function(log) {
-//            var cbmInput = log.querySelector('.cbm-input');
-//            if (cbmInput.value.trim() !== '') {
-//                totalCBM += parseFloat(cbmInput.value);
-//            }
-//        });
-//
-//        var netAvg = (totalCBM * 35.315) / totalLogRows;
-//        return netAvg.toFixed(2);
-//    }
-//
-//    // Calculate total CBM, total log rows, and net average
-//    calculateTotalCBM();
-//    var totalLogRows = calculateTotalLogRows();
-//
-//    document.getElementById('totalLogRows').textContent = totalLogRows;
-//    var netAvg = calculateNetAvg();
-//
-//    document.getElementById('netAvg').textContent = netAvg;
-//});
-
-
-
+    if (containerInfoLink) {
+        containerInfoLink.addEventListener('click', () => {
+            window.location.reload();
+        });
+    } else {
+        console.error('Element with ID "tab1-tab" not found');
+    }
+});

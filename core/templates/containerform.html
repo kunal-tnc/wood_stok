@@ -32,9 +32,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Finished Logs</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="tab4-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false">Final</a>
-                                </li>
+
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
@@ -61,8 +59,8 @@
                                                 </div>
                                                 {% endif %}
                                                 <div class="form-group col-6">
-                                                    <label for="total_pieces" class="fw-bold">Total Pieces</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.total_pieces }}" id="total_pieces" name="total_pieces" required>
+                                                    <label for="total_pieces" class="fw-bold">Total Pieces   [As Per Actual measurement]</label>
+                                                    <input type="number" class="form-control" value="{{ form.instance.total_pieces }}" id="total_pieces" name="total_pieces" readonly>
                                                 </div>
                                             </div>
                                             <div class="d-flex">
@@ -71,8 +69,8 @@
                                                     <input type="number" class="form-control" value="{{ form.instance.ncbm }}" id="ncbm" name="ncbm" step="0.01" min="0" required>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label for="total_cbm" class="fw-bold">Total CBM</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.total_cbm }}" id="total_cbm" name="total_cbm" step="0.01" min="0" required>
+                                                    <label for="total_cbm" class="fw-bold">Total CBM   [As Per Actual measurement]</label>
+                                                    <input type="number" class="form-control" value="{{ form.instance.total_cbm }}" id="total_cbm" name="total_cbm" step="0.01" min="0" readonly>
                                                 </div>
                                             </div>
                                             <div class="d-flex">
@@ -81,8 +79,8 @@
                                                     <input type="number" class="form-control" value="{{ form.instance.rate }}" id="rate" name="rate" min="0" required>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label for="a_navg" class="fw-bold">Total NAVG</label>
-                                                    <input type="number" class="form-control" id="a_navg" value="{{ form.instance.a_navg }}" name="a_navg" step="0.01" min="0" required>
+                                                    <label for="a_navg" class="fw-bold">Total NAVG   [As Per Actual measurement]</label>
+                                                    <input type="number" class="form-control" id="a_navg" value="{{ form.instance.a_navg }}" name="a_navg" step="0.01" min="0" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group col-6">
@@ -117,7 +115,10 @@
                                             </div>
 
                                             <button type="submit" class="btn btn-success py-2 float-right mb-2"  style="width:auto; font-size:18px">Submit</button>
-                                            <button type="button" class="btn btn-danger py-2 float-right mr-2 mb-2"  style="width:auto"><a style="color:white; font-size:18px" href="/container/">Cancel</a></button>
+                                            <button type="button" class="btn btn-danger py-2 float-right mr-2 mb-2" style="width:auto; color:white; font-size:18px;" onclick="window.location.href='/container/'">
+                                                Cancel
+                                            </button>
+
                                         </form>
 
                                     </div>
@@ -190,9 +191,6 @@
                                                     {% endif %}
                                                 </tbody>
                                             </table>
-<!--                                            <p>Total CBM: <span id="totalCBM">0.00</span></p>-->
-<!--                                            <span id="totalLogRows"></span>-->
-<!--                                            <span id="netAvg"></span>-->
 
                                         </div>
                                     </form>
@@ -223,16 +221,16 @@
                                                             <tr>
                                                                 <td>#</td>
                                                                 <td>
-                                                                    <input type="number" class="form-control l-input" id="length" name="length" min="0" required>
+                                                                    <input type="number" class="form-control" id="length" name="length" min="0" required>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control w-input" id="width" name="width" min="0" step=".01" required>
+                                                                    <input type="number" class="form-control" id="width" name="width" min="0" step=".01" required>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control t-input" id="thickness" name="thickness" min="0" step=".01" required>
+                                                                    <input type="number" class="form-control" id="thickness" name="thickness" min="0" step=".01" required>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control c-input" id="cft" name="cft" min="0" step=".01" readonly>
+                                                                    <input type="number" class="form-control" id="cft" name="cft" min="0" step=".01" readonly>
                                                                 </td>
                                                                 <td>
                                                                     <a href="#"><i class="fa fa-trash delete-row" /></a>

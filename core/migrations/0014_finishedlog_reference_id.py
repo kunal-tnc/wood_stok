@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0013_rename_height_finishedlog_thickness'),
+        ("core", "0013_rename_height_finishedlog_thickness"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='finishedlog',
-            name='reference_id',
+            model_name="finishedlog",
+            name="reference_id",
             field=models.CharField(blank=True, null=True),
         ),
     ]

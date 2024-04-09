@@ -7,20 +7,36 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Container',
+            name="Container",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('container_number', models.CharField(max_length=50)),
-                ('pieces', models.IntegerField()),
-                ('ncbm', models.DecimalField(decimal_places=2, default=0, max_digits=4)),
-                ('navg', models.DecimalField(decimal_places=2, default=0, max_digits=4)),
-                ('rate', models.IntegerField()),
-                ('amount', models.DecimalField(decimal_places=1, default=0, max_digits=4)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("container_number", models.CharField(max_length=50)),
+                ("pieces", models.IntegerField()),
+                (
+                    "ncbm",
+                    models.DecimalField(decimal_places=2, default=0, max_digits=4),
+                ),
+                (
+                    "navg",
+                    models.DecimalField(decimal_places=2, default=0, max_digits=4),
+                ),
+                ("rate", models.IntegerField()),
+                (
+                    "amount",
+                    models.DecimalField(decimal_places=1, default=0, max_digits=4),
+                ),
             ],
         ),
     ]

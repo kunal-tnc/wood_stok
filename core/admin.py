@@ -2,8 +2,8 @@ from django.contrib import admin
 
 from .models import Container, FinishedLog, Log, Vendor
 
-admin.site.site_header = 'Admin Dashboard'
-admin.site.index_title = 'Woods Logs Recode App'
+admin.site.site_header = "Admin Dashboard"
+admin.site.index_title = "Woods Logs Recode App"
 admin.site.register(Vendor)
 
 

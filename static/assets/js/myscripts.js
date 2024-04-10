@@ -63,7 +63,7 @@ $(document).on('click', '#add-more', function() {
             <td><input type="number" class="form-control td-length" name="length" id="#${count}length" step="0.25" min="0" required></td>
             <td><input type="number" class="form-control td-width" name="width" id="#${count}width" min="0" step=".01" required></td>
             <td><input type="number" class="form-control td-thickness" name="height" id="#${count}thickness" min="0" step=".01" required></td>
-            <td><input type="number" class="form-control td-cft" name="cft" id="#${count}cft" min="0" step=".01" readonly></td>
+            <td><input type="number" class="form-control td-cft" name="cft" id="#${count}cft" min="0" readonly></td>
             <td><a href="#"><i class="fa fa-trash delete-row"/></a></td>
         </tr>
         `;
@@ -174,7 +174,7 @@ $(document).on('click', '#f_log', function() {
                         <td><input type="number" class="form-control td-length" id="${response[i]['id']}length" name="length" required value="${response[i]['length']}" step="0.25" min="0"></td>
                         <td><input type="number" class="form-control td-width" id="${response[i]['id']}width" name="width" required value="${response[i]['width']}" min="0" step=".01"></td>
                         <td><input type="number" class="form-control td-thickness" id="${response[i]['id']}thickness" name="thickness" required value="${response[i]['thickness']}" min="0" step=".01"></td>
-                        <td><input type="number" class="form-control td-cft" id="${response[i]['id']}cft" name="cft" readonly value="${response[i]['cft']}" min="0" step=".01"></td>
+                        <td><input type="number" class="form-control td-cft" id="${response[i]['id']}cft" name="cft" readonly value="${response[i]['cft']}" min="0"></td>
                         <td><a href="#" class="delete-row" data-finish-log-id="${response[i]['id']}"><i class="fa fa-trash"></i></a></td>
                     </tr>
                 `;
@@ -270,10 +270,11 @@ $(document).ready(function() {
 
 
         // Calculate CBM
-        var cbm = (girth * girth * length) / 16;
+        var cal = (girth * girth * length) / 16;
+        var cbm = cal / 1000000;
         var cft = cbm * conversionFactor
-        cbm = cbm.toFixed(2);
-        $('#cftInput').val(cft.toFixed(2));
+        cbm = cbm.toFixed(3);
+        $('#cftInput').val(cft.toFixed(3));
         $('#cbmInput').val(cbm);
     }
 
@@ -368,10 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-//  9th scripted started
-$(document).ready(function() {
-    $('#myTable').DataTable();
-});
+
 //  10th scripted started
 
 $(document).on('click', '#tab3-tab', function() {
@@ -417,10 +415,11 @@ $(document).on('change', '.length-input, .girth-input', function() {
     var girth = parseFloat($tr.find('.girth-input').val());
 
 
-    var cbm = (girth * girth * length) / 16;
+    var cal = (girth * girth * length) / 16;
+    var cbm = cal / 1000000;
     var cft = cbm * conversionFactor
-    $tr.find('.cft-input').val(cft.toFixed(2));
-    $tr.find('.cbm-input').val(cbm.toFixed(2));
+    $tr.find('.cft-input').val(cft.toFixed(3));
+    $tr.find('.cbm-input').val(cbm.toFixed(3));
 })
 
 document.addEventListener('DOMContentLoaded', () => {

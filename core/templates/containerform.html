@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
 <div class="main-panel">
     <div class="content">
@@ -42,25 +40,22 @@
                                             <div class="d-flex">
                                                 {% if not form.instance.pk %}
                                                 <div class="form-group col-6">
-                                                <label for="container_number" class="fw-bold">Container Number</label>
-                                                <input type="text" class="form-control" value="{{ form.instance.container_number }}" id="container_number" name="container_number" placeholder="Enter Container Number" required>
-                                                {% if form.errors.container_number %}
-                                                <p class="text-danger">{{ form.errors.container_number }}</p>
-                                                {% endif %}
+                                                    <label for="container_number" class="fw-bold">Container Number</label>
+                                                    <input type="text" class="form-control" value="{{ form.instance.container_number }}" id="container_number" name="container_number" placeholder="Enter Container Number" required> {% if form.errors.container_number %}
+                                                    <p class="text-danger">{{ form.errors.container_number }}</p>
+                                                    {% endif %}
                                                 </div>
-                                                {% endif %}
-                                                {% if form.instance.pk %}
+                                                {% endif %} {% if form.instance.pk %}
                                                 <div class="form-group col-6">
-                                                <label for="container_number" class="fw-bold">Container Number</label>
-                                                <input type="text" class="form-control" value="{{ form.instance.container_number }}" id="container_number" name="container_number" placeholder="Enter Container Number" readonly>
-                                                {% if form.errors.container_number %}
-                                                <p class="text-danger">{{ form.errors.container_number }}</p>
-                                                {% endif %}
+                                                    <label for="container_number" class="fw-bold">Container Number</label>
+                                                    <input type="text" class="form-control" value="{{ form.instance.container_number }}" id="container_number" name="container_number" placeholder="Enter Container Number" readonly style="color: black;"> {% if form.errors.container_number %}
+                                                    <p class="text-danger">{{ form.errors.container_number }}</p>
+                                                    {% endif %}
                                                 </div>
                                                 {% endif %}
                                                 <div class="form-group col-6">
-                                                    <label for="total_pieces" class="fw-bold">Total Pieces   [As Per Actual measurement]</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.total_pieces }}" id="total_pieces" name="total_pieces" readonly>
+                                                    <label for="total_pieces" class="fw-bold">Total Pieces [As Per Actual measurement]</label>
+                                                    <input type="number" class="form-control" value="{{ form.instance.total_pieces }}" id="total_pieces" name="total_pieces" readonly style="color: black;">
                                                 </div>
                                             </div>
                                             <div class="d-flex">
@@ -69,8 +64,8 @@
                                                     <input type="number" class="form-control" value="{{ form.instance.ncbm }}" id="ncbm" name="ncbm" step="0.01" min="0" required>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label for="total_cbm" class="fw-bold">Total CBM   [As Per Actual measurement]</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.total_cbm }}" id="total_cbm" name="total_cbm" step="0.01" min="0" readonly>
+                                                    <label for="total_cbm" class="fw-bold">Total CBM [As Per Actual measurement]</label>
+                                                    <input type="number" class="form-control" value="{{ form.instance.total_cbm }}" id="total_cbm" name="total_cbm" readonly style="color: black;">
                                                 </div>
                                             </div>
                                             <div class="d-flex">
@@ -79,19 +74,42 @@
                                                     <input type="number" class="form-control" value="{{ form.instance.rate }}" id="rate" name="rate" min="0" required>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label for="a_navg" class="fw-bold">Total NAVG   [As Per Actual measurement]</label>
-                                                    <input type="number" class="form-control" id="a_navg" value="{{ form.instance.a_navg }}" name="a_navg" step="0.01" min="0" readonly>
+                                                    <label for="a_navg" class="fw-bold">Total NAVG [As Per Actual measurement]</label>
+                                                    <input type="number" class="form-control" id="a_navg" value="{{ form.instance.a_navg }}" name="a_navg" readonly style="color: black;">
                                                 </div>
                                             </div>
-                                            <div class="form-group col-6">
+                                            <div class="d-flex">
+                                                <div class="form-group col-6">
                                                     <label for="navg" class="fw-bold">NAVG</label>
                                                     <input type="number" class="form-control" value="{{ form.instance.navg }}" id="navg" name="navg" step="0.01" min="0" required>
                                                 </div>
-                                            <div class="form-group col-6">
+                                                <div class="form-group col-6">
+                                                    <label for="sort_axis_pieces" class="fw-bold">Sort/Axis Pieces [As Per Actual calculate]</label>
+                                                    <input type="number" class="form-control {% if form.instance.sort_axis_pieces >= 0 %}is-valid{% elif form.instance.sort_axis_pieces < 0 %}is-invalid{% endif %}" id="sort_axis_pieces" value="{{ form.instance.sort_axis_pieces }}" name="sort_axis_pieces"
+                                                    min="0" readonly style="color:
+                                                    {% if form.instance.sort_axis_pieces == 0 %}black
+                                                    {% elif form.instance.sort_axis_pieces >= 0 %}darkgreen
+                                                    {% else %}darkred
+                                                    {% endif %};">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex">
+                                                <div class="form-group col-6">
                                                     <label for="pieces" class="fw-bold">Pieces</label>
                                                     <input type="number" class="form-control" value="{{ form.instance.pieces }}" id="pieces" name="pieces" required>
                                                 </div>
-                                            <div class="form-group col-6">
+                                                <div class="form-group col-6">
+                                                    <label for="sort_axis_cbm" class="fw-bold">Sort/Axis CBM [As Per Actual calculate]</label>
+                                                    <input type="number" class="form-control" id="sort_axis_cbm" value="{{ form.instance.sort_axis_cbm }}" name="sort_axis_cbm" readonly style="color:
+                                                    {% if form.instance.sort_axis_cbm == 0 %}black
+                                                    {% elif form.instance.sort_axis_cbm >= 0 %}darkgreen
+                                                    {% else %}darkred
+                                                    {% endif %};">
+                                                </div>
+
+                                            </div>
+                                            <div class="d-flex">
+                                                <div class="form-group col-6">
                                                     <label for="vendor" class="fw-bold">Vendor</label>
                                                     <select class="form-control" id="vendor" name="vendor" required>
                                                         {% if form.instance.vendor %} {% for vendor in vendors %} {% if vendor.id == form.instance.vendor.id %}
@@ -105,16 +123,27 @@
                                                         {% endfor %} {% endif %}
                                                     </select>
                                                 </div>
+                                                <div class="form-group col-6">
+                                                    <label for="sort_axis_navg" class="fw-bold">Sort/Axis NAVG [As Per Actual calculate]</label>
+                                                    <input type="number" class="form-control {% if form.instance.sort_axis_navg >= 0 %}is-valid{% elif form.instance.sort_axis_navg < 0 %}is-invalid{% endif %}" id="sort_axis_navg" value="{{ form.instance.sort_axis_navg }}" name="sort_axis_navg"
+                                                    min="0" readonly style="color:
+                                                    {% if form.instance.sort_axis_navg == 0 %}black
+                                                    {% elif form.instance.sort_axis_navg >= 0 %}darkgreen
+                                                    {% else %}darkred
+                                                    {% endif %};">
+                                                </div>
+
+                                            </div>
                                             <div class="d-flex">
 
                                                 <div class="form-group col-6">
                                                     <label for="amount" class="fw-bold">Amount</label>
-                                                    <input type="number" class="form-control" id="amount" value="{{ form.instance.amount }}" name="amount" step="0.01" min="0" required>
+                                                    <input type="number" class="form-control" id="amount" value="{{ form.instance.amount }}" name="amount" min="0" required>
                                                 </div>
 
                                             </div>
 
-                                            <button type="submit" class="btn btn-success py-2 float-right mb-2"  style="width:auto; font-size:18px">Submit</button>
+                                            <button type="submit" class="btn btn-success py-2 float-right mb-2" style="width:auto; font-size:18px">Submit</button>
                                             <button type="button" class="btn btn-danger py-2 float-right mr-2 mb-2" style="width:auto; color:white; font-size:18px;" onclick="window.location.href='/container/'">
                                                 Cancel
                                             </button>
@@ -128,7 +157,7 @@
                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#newLogModal">
                                             Add New Log
                                         </button>
-                                        <button class="btn btn-success ml-2" id="save-table-data"  data-csrf-token="{{ csrf_token }}">Save</button>
+                                        <button class="btn btn-success ml-2" id="save-table-data" data-csrf-token="{{ csrf_token }}">Save</button>
                                     </div>
 
 
@@ -156,10 +185,10 @@
                                                             <input type="number" id="girthInputs" value="{{ log.girth }}" class="form-control girth-input" name="log_{{log.id}}" min="0" required/>
                                                         </td>
                                                         <td>
-                                                            <input type="number" id="cftInputs" value="{{ log.cft }}" class="form-control cft-input"  name="log_{{log.id}}" min="0" step=".01" readonly/>
+                                                            <input type="number" id="cftInputs" value="{{ log.cft }}" class="form-control cft-input" name="log_{{log.id}}" min="0" readonly style="color: black;" />
                                                         </td>
                                                         <td>
-                                                            <input type="number" id="cbmInputs" value="{{ log.cbm }}" class="form-control cbm-input" name="log_{{log.id}}" min="0" step=".01" readonly/>
+                                                            <input type="number" id="cbmInputs" value="{{ log.cbm }}" class="form-control cbm-input" name="log_{{log.id}}" min="0" readonly style="color: black;" />
                                                         </td>
                                                         <td>
                                                             <div class="d-flex justify-between gap-4">
@@ -167,20 +196,20 @@
                                                                     <button type="button" class="btn btn-success mr-4" id="f_log" value="{{ log.id }}" data-toggle="modal" data-target="#addLogModal">Finished Logs</button>
                                                                 </div>
 
-<!--                                                                <div class="d-inline-flex">-->
-<!--                                                                    <button class="green-button delete-log-button" style="background-color: #ff6666; width: 30px; height: 30px; border-radius: 50%; border: none;" data-log-id="{{ log.id }}" data-csrf-token="{{ csrf_token }}">-->
-<!--                                                                        <a href="{% url 'delete_container_log' log.id %}" class="d-flex justify-content-center align-items-center" style="width: 100%; height: 100%;">-->
-<!--                                                                            <svg class="svg" height="20" viewBox="0 0 512 512" width="20" xmlns="http://www.w3.org/2000/svg">-->
-<!--                                                                                <path d="M112,112l20,320c.95,18.49,14.4,32,32,32H348c17.67,0,30.87-13.51,32-32l20-320" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>-->
-<!--                                                                                <line style="stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" x1="80" x2="432" y1="112" y2="112"></line>-->
-<!--                                                                                <path d="M192,112V72h0a23.93,23.93,0,0,1,24-24h80a23.93,23.93,0,0,1,24,24h0v40" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>-->
-<!--                                                                                <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="256" x2="256" y1="176" y2="400"></line>-->
-<!--                                                                                <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="184" x2="192" y1="176" y2="400"></line>-->
-<!--                                                                                <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="328" x2="320" y1="176" y2="400"></line>-->
-<!--                                                                            </svg>-->
-<!--                                                                        </a>-->
-<!--                                                                    </button>-->
-<!--                                                                </div>-->
+                                                                <!--                                                                <div class="d-inline-flex">-->
+                                                                <!--                                                                    <button class="green-button delete-log-button" style="background-color: #ff6666; width: 30px; height: 30px; border-radius: 50%; border: none;" data-log-id="{{ log.id }}" data-csrf-token="{{ csrf_token }}">-->
+                                                                <!--                                                                        <a href="{% url 'delete_container_log' log.id %}" class="d-flex justify-content-center align-items-center" style="width: 100%; height: 100%;">-->
+                                                                <!--                                                                            <svg class="svg" height="20" viewBox="0 0 512 512" width="20" xmlns="http://www.w3.org/2000/svg">-->
+                                                                <!--                                                                                <path d="M112,112l20,320c.95,18.49,14.4,32,32,32H348c17.67,0,30.87-13.51,32-32l20-320" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>-->
+                                                                <!--                                                                                <line style="stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" x1="80" x2="432" y1="112" y2="112"></line>-->
+                                                                <!--                                                                                <path d="M192,112V72h0a23.93,23.93,0,0,1,24-24h80a23.93,23.93,0,0,1,24,24h0v40" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>-->
+                                                                <!--                                                                                <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="256" x2="256" y1="176" y2="400"></line>-->
+                                                                <!--                                                                                <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="184" x2="192" y1="176" y2="400"></line>-->
+                                                                <!--                                                                                <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="328" x2="320" y1="176" y2="400"></line>-->
+                                                                <!--                                                                            </svg>-->
+                                                                <!--                                                                        </a>-->
+                                                                <!--                                                                    </button>-->
+                                                                <!--                                                                </div>-->
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -230,7 +259,7 @@
                                                                     <input type="number" class="form-control" id="thickness" name="thickness" min="0" step=".01" required>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control" id="cft" name="cft" min="0" step=".01" readonly>
+                                                                    <input type="number" class="form-control" id="cft" name="cft" min="0" readonly>
                                                                 </td>
                                                                 <td>
                                                                     <a href="#"><i class="fa fa-trash delete-row" /></a>
@@ -244,7 +273,8 @@
                                                             </tfoot>
                                                         </table>
                                                         <div class="d-flex justify-content-end">
-                                                        <button type="submit" class="btn btn-primary">Save</button></div>
+                                                            <button type="submit" class="btn btn-primary">Save</button>
+                                                        </div>
                                                     </form>
                                                 </div>
 
@@ -254,42 +284,42 @@
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="newLogModal" tabindex="-1" role="dialog" aria-labelledby="newLogModalLabel" aria-hidden="true">
-                                      <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                          <div class="modal-header">
-                                            <h5 class="modal-title" id="newLogModalLabel">Add Log</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                              <span aria-hidden="true">&times;</span>
-                                            </button>
-                                          </div>
-                                          <div class="modal-body">
-                                            <form id="logForm">
-                                                {% csrf_token %}
-                                                <div class="form-group">
-                                                    <label>Length</label>
-                                                    <input type="number" class="form-control" name="length" id="lengthInput" placeholder="Enter length" min="0" required>
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="newLogModalLabel">Add Log</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Girth</label>
-                                                    <input type="number" class="form-control" name="girth" id="girthInput" placeholder="Enter girth" step=".01"  min="0" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>CFT</label>
-                                                    <input type="number" class="form-control" name="cft" id="cftInput" placeholder="CFT" min="0" readonly>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>CBM</label>
-                                                    <input type="number" class="form-control" name="cbm" id="cbmInput" placeholder="CBM" min="0" readonly>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <input type="hidden" name="container" id="cont_id" value="{{ form.instance.id }}" />
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                <div class="modal-body">
+                                                    <form id="logForm">
+                                                        {% csrf_token %}
+                                                        <div class="form-group">
+                                                            <label>Length</label>
+                                                            <input type="number" class="form-control" name="length" id="lengthInput" placeholder="Enter length" min="0" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Girth</label>
+                                                            <input type="number" class="form-control" name="girth" id="girthInput" placeholder="Enter girth" step=".01" min="0" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>CFT</label>
+                                                            <input type="number" class="form-control" name="cft" id="cftInput" placeholder="CFT" min="0" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>CBM</label>
+                                                            <input type="number" class="form-control" name="cbm" id="cbmInput" placeholder="CBM" min="0" readonly>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input type="hidden" name="container" id="cont_id" value="{{ form.instance.id }}" />
+                                                            <button type="submit" class="btn btn-primary">Submit</button>
 
+                                                        </div>
+                                                    </form>
                                                 </div>
-                                            </form>
-                                          </div>
+                                            </div>
                                         </div>
-                                      </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
@@ -323,9 +353,9 @@
                                         </div>
                                     </form>
                                 </div>
-                            <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+                                <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
 
-                            </div>
+                                </div>
                             </div>
 
                         </div>

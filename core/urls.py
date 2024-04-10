@@ -16,11 +16,6 @@ urlpatterns = [
         DeleteContainerView.as_view(),
         name="delete_container",
     ),
-    path(
-        "container/update/",
-        UpdateContainerReportView.as_view(),
-        name="update_container_report",
-    ),
     # Log-related URLs
     path("logs/", LogsListView.as_view(), name="log_list"),
     path(

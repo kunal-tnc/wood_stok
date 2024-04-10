@@ -84,6 +84,7 @@ class UpdateContainerView(View):
         form = ContainerForm(request.POST, instance=container)
         if form.is_valid():
             form.save()
+            container.calculate_sort_axis()
             return redirect("container_list")
         else:
             vendors = Vendor.objects.all()
@@ -112,39 +113,6 @@ class DeleteContainerView(View):
         container_obj = get_object_or_404(Container, pk=pk)
         container_obj.delete()
         return JsonResponse({"message": "container deleted successfully"})
-
-
-class UpdateContainerReportView(View):
-    """
-    View for updating container records.
-    """
-
-    def put(self, request):
-        try:
-            data = json.loads(request.body)
-            if data:
-                try:
-                    con_data = Container.objects.get(id=data["cont_id"])
-                except Container.DoesNotExist:
-                    return JsonResponse(
-                        {"error": f"Container does not exist"}, status=404
-                    )
-                con_data.total_pieces = data["total_pieces"]
-                con_data.total_cbm = data["total_cbm"]
-                con_data.a_navg = data["a_navg"]
-                con_data.save()
-            return JsonResponse(
-                {
-                    "message": "container updated successfully",
-                    "total_pieces": data["total_pieces"],
-                    "total_cbm": data["total_cbm"],
-                    "a_navg": data["a_navg"],
-                }
-            )
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON data"}, status=400)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
 
 
 class LogsFormView(View):
@@ -240,7 +208,7 @@ class UpdateLogsView(View):
                 container_id = data["cont_id"]
                 container = Container.objects.get(id=container_id)
                 container.recompute_totals()
-
+                container.calculate_sort_axis()
                 return JsonResponse(
                     {
                         "message": "Logs updated successfully",
@@ -281,6 +249,7 @@ class DeleteLogsView(View):
         log.delete()
         return redirect("container_list")
 
+
 class SingleLogsView(View):
     """
     View for handling logs form submissions.
@@ -314,6 +283,7 @@ class SingleLogsView(View):
             form.save()
             container = Container.objects.get(id=container_id)
             container.recompute_totals()
+            container.calculate_sort_axis()
             return JsonResponse(
                 {
                     "success": True,
@@ -326,6 +296,7 @@ class SingleLogsView(View):
         else:
             errors = form.errors.as_json()
             return JsonResponse({"success": False, "errors": errors})
+
 
 class FinishedLogsInfoView(View):
     """

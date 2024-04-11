@@ -9,41 +9,62 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
+                        <div class="card-body">
+                            {% if combination_logs %}
+                                <div id="accordion">
+                                    {% for combination, logs, logs_count, length_counts in combination_logs %}
+                                        <div class="card" style="margin-bottom: 0;">
+                                            <div class="card-header" id="heading{{ forloop.counter }}" style="padding:7px 5px">
+                                                <button class="btn" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}" style="color: black; font-size: 16px;">
+                                                    Finished Logs Count: <span>{{ logs_count }}</span>,&nbsp;&nbsp;&nbsp; (width: <span>{{ combination.0 }}</span>, thickness: <span>{{ combination.1 }}</span>),&nbsp;&nbsp;&nbsp;
+                                                    {% for length, count in length_counts.items %}
+                                                        [Length: <span>{{ length }}</span>, Count: <span>{{ count }}</span>]
+                                                    {% endfor %}
+                                                </button>
 
-                       <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="myTable" class="table table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">S No.</th>
-                                            <th scope="col">Length</th>
-                                            <th scope="col">Width</th>
-                                            <th scope="col">Thickness</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for f_log in finishedlog %}
-                                        <tr>
-                                            <td>{{ f_log.id }}</td>
-                                            <td>{{ f_log.length }}</td>
-                                            <td>{{ f_log.width }}</td>
-                                            <td>{{ f_log.thickness }}</td>
-                                        </tr>
-                                        {% empty %}
-                                        <tr>
-                                            <td colspan="4" class="text-center">No data available</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+                                            </div>
+                                            <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordion">
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-condensed">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">S No.</th>
+                                                                    <th scope="col">Length</th>
+                                                                    <th scope="col">Width</th>
+                                                                    <th scope="col">Thickness</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for log in logs %}
+                                                                    <tr>
+                                                                        <td>{{ log.id }}</td>
+                                                                        <td>{{ log.length }}</td>
+                                                                        <td>{{ log.width }}</td>
+                                                                        <td>{{ log.thickness }}</td>
+                                                                    </tr>
+                                                                {% empty %}
+                                                                    <tr>
+                                                                        <td colspan="4" class="text-center">No data available</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p>No data available</p>
+                            {% endif %}
                         </div>
-
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

@@ -113,4 +113,4 @@ class FinishedLog(models.Model):
     reference_id = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"Log: {self.log.id}, FinishedLog id: {self.id}"
+        return f"Log: {self.log.id}, FinishedLog id: {self.id}, length:{self.length}, width:{self.width}, thickness:{self.thickness}"

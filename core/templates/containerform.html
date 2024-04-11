@@ -7,18 +7,23 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-end align-items-center">
-
+                            {% if form.instance.pk %}
+                                <div class="form-group">
+                                    <p class="fw-bold text-dark mb-0" style="margin-right: auto;">Container Number: <span class="text-primary">{{ form.instance.container_number }}</span></p>
+                                </div>
+                            {% endif %}
                             <input type="hidden" name="log_exists" id="log_exists" value="{{ log_exists }}" />
                             <div>
                                 {% if form.instance.id %}
-                                <form action="/container/logs/create/" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="container" value="{{ form.instance.id }}" />
-                                    <button class="btn btn-primary" id="logsExists" type="submit">Create Logs</button>
-                                </form>
+                                    <form action="/container/logs/create/" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="container" value="{{ form.instance.id }}" />
+                                        <button class="btn btn-primary" id="logsExists" type="submit">Create Logs</button>
+                                    </form>
                                 {% endif %}
                             </div>
                         </div>
+
                         <div class="container-fluid">
                             <ul class="nav nav-tabs justify-content-left">
                                 <li class="nav-item">
@@ -48,13 +53,13 @@
                                                 {% endif %} {% if form.instance.pk %}
                                                 <div class="form-group col-6">
                                                     <label for="container_number" class="fw-bold">Container Number</label>
-                                                    <input type="text" class="form-control" value="{{ form.instance.container_number }}" id="container_number" name="container_number" placeholder="Enter Container Number" readonly style="color: black;"> {% if form.errors.container_number %}
+                                                    <input type="text" class="form-control" value="{{ form.instance.container_number }}"  name="container_number" placeholder="Enter Container Number" readonly style="color: black;"> {% if form.errors.container_number %}
                                                     <p class="text-danger">{{ form.errors.container_number }}</p>
                                                     {% endif %}
                                                 </div>
                                                 {% endif %}
                                                 <div class="form-group col-6">
-                                                    <label for="total_pieces" class="fw-bold">Total Pieces [As Per Actual measurement]</label>
+                                                    <label for="total_pieces" class="fw-bold">Total Pieces &nbsp;&nbsp;[As Per Actual measurement]</label>
                                                     <input type="number" class="form-control" value="{{ form.instance.total_pieces }}" id="total_pieces" name="total_pieces" readonly style="color: black;">
                                                 </div>
                                             </div>
@@ -64,7 +69,7 @@
                                                     <input type="number" class="form-control" value="{{ form.instance.ncbm }}" id="ncbm" name="ncbm" step="0.01" min="0" required>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label for="total_cbm" class="fw-bold">Total CBM [As Per Actual measurement]</label>
+                                                    <label for="total_cbm" class="fw-bold">Total CBM &nbsp;&nbsp;[As Per Actual measurement]</label>
                                                     <input type="number" class="form-control" value="{{ form.instance.total_cbm }}" id="total_cbm" name="total_cbm" readonly style="color: black;">
                                                 </div>
                                             </div>
@@ -74,7 +79,7 @@
                                                     <input type="number" class="form-control" value="{{ form.instance.rate }}" id="rate" name="rate" min="0" required>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label for="a_navg" class="fw-bold">Total NAVG [As Per Actual measurement]</label>
+                                                    <label for="a_navg" class="fw-bold">Total NAVG &nbsp;&nbsp;[As Per Actual measurement]</label>
                                                     <input type="number" class="form-control" id="a_navg" value="{{ form.instance.a_navg }}" name="a_navg" readonly style="color: black;">
                                                 </div>
                                             </div>
@@ -84,9 +89,9 @@
                                                     <input type="number" class="form-control" value="{{ form.instance.navg }}" id="navg" name="navg" step="0.01" min="0" required>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label for="sort_axis_pieces" class="fw-bold">Sort/Axis Pieces [As Per Actual calculate]</label>
+                                                    <label for="sort_axis_pieces" class="fw-bold">Sort/Axis Pieces &nbsp;&nbsp;[As Per Actual calculate]</label>
                                                     <input type="number" class="form-control {% if form.instance.sort_axis_pieces >= 0 %}is-valid{% elif form.instance.sort_axis_pieces < 0 %}is-invalid{% endif %}" id="sort_axis_pieces" value="{{ form.instance.sort_axis_pieces }}" name="sort_axis_pieces"
-                                                    min="0" readonly style="color:
+                                                    readonly style="color:
                                                     {% if form.instance.sort_axis_pieces == 0 %}black
                                                     {% elif form.instance.sort_axis_pieces >= 0 %}darkgreen
                                                     {% else %}darkred
@@ -99,7 +104,7 @@
                                                     <input type="number" class="form-control" value="{{ form.instance.pieces }}" id="pieces" name="pieces" required>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label for="sort_axis_cbm" class="fw-bold">Sort/Axis CBM [As Per Actual calculate]</label>
+                                                    <label for="sort_axis_cbm" class="fw-bold">Sort/Axis CBM &nbsp;&nbsp;[As Per Actual calculate]</label>
                                                     <input type="number" class="form-control" id="sort_axis_cbm" value="{{ form.instance.sort_axis_cbm }}" name="sort_axis_cbm" readonly style="color:
                                                     {% if form.instance.sort_axis_cbm == 0 %}black
                                                     {% elif form.instance.sort_axis_cbm >= 0 %}darkgreen
@@ -124,9 +129,9 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label for="sort_axis_navg" class="fw-bold">Sort/Axis NAVG [As Per Actual calculate]</label>
+                                                    <label for="sort_axis_navg" class="fw-bold">Sort/Axis NAVG &nbsp;&nbsp;[As Per Actual calculate]</label>
                                                     <input type="number" class="form-control {% if form.instance.sort_axis_navg >= 0 %}is-valid{% elif form.instance.sort_axis_navg < 0 %}is-invalid{% endif %}" id="sort_axis_navg" value="{{ form.instance.sort_axis_navg }}" name="sort_axis_navg"
-                                                    min="0" readonly style="color:
+                                                    readonly style="color:
                                                     {% if form.instance.sort_axis_navg == 0 %}black
                                                     {% elif form.instance.sort_axis_navg >= 0 %}darkgreen
                                                     {% else %}darkred
@@ -352,9 +357,6 @@
 
                                         </div>
                                     </form>
-                                </div>
-                                <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
-
                                 </div>
                             </div>
 

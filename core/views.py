@@ -7,9 +7,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import FormView, TemplateView
-
+from collections import defaultdict
 from .forms import *
 from .models import *
+from .utils import group_by_combination
 
 
 class ContainerListView(View):
@@ -366,9 +367,21 @@ class FinishedListView(View):
     def get(self, request):
         """Handles GET request to display finished log list."""
 
-        finished_log = FinishedLog.objects.all()
+        finished_logs = FinishedLog.objects.all()
 
-        return render(request, "finishedlogstable.html", {"finishedlog": finished_log})
+        seen_combinations = set((log.width, log.thickness) for log in finished_logs)
+        products_by_combination = group_by_combination(finished_logs, seen_combinations)
+
+        combination_logs = []
+        for combination, logs in products_by_combination.items():
+            length_counts = defaultdict(int)
+            for log in logs:
+                length_counts[log['length']] += 1
+
+            length_counts = dict(length_counts)
+            combination_logs.append((combination, logs, len(logs), length_counts))
+
+        return render(request, "finishedlogstable.html", {"combination_logs": combination_logs})
 
 
 class FinishedLogsList(View):

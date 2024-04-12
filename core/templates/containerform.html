@@ -168,7 +168,7 @@
 
                                     <form id="table-data">
                                         <div class="table-responsive">
-                                            <table id="myTable" class="table table-condensed w-100">
+                                            <table id="mylogTable" class="table table-condensed w-100">
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">SNO</th>
@@ -190,10 +190,10 @@
                                                             <input type="number" id="girthInputs" value="{{ log.girth }}" class="form-control girth-input" name="log_{{log.id}}" min="0" required/>
                                                         </td>
                                                         <td>
-                                                            <input type="number" id="cftInputs" value="{{ log.cft }}" class="form-control cft-input" name="log_{{log.id}}" min="0" readonly style="color: black;" />
+                                                            <input type="number" id="cftInputs" value="{{ log.cft }}" class="form-control cft-input" name="log_{{log.id}}" min="0" step=".001" readonly style="color: black;" />
                                                         </td>
                                                         <td>
-                                                            <input type="number" id="cbmInputs" value="{{ log.cbm }}" class="form-control cbm-input" name="log_{{log.id}}" min="0" readonly style="color: black;" />
+                                                            <input type="number" id="cbmInputs" value="{{ log.cbm }}" class="form-control cbm-input" name="log_{{log.id}}" min="0" step=".001" readonly style="color: black;" />
                                                         </td>
                                                         <td>
                                                             <div class="d-flex justify-between gap-4">

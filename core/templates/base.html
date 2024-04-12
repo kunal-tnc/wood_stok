@@ -1,6 +1,5 @@
 {% load static %}
 <!DOCTYPE html>
-<html><!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -42,7 +41,7 @@
 
 						</li>
 						<li class="nav-item dropdown">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="{% static 'assets/img/profile.jpg' %}"  alt="user-img" width="36" class="img-circle"><span >{{ request.user.username }}</span></span> </a>
+							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="{% static 'assets/img/profile.jpg' %}"  alt="user-img" width="36" class="img-circle"><span>{{ request.user.username }}</span></a>
 							<ul class="dropdown-menu dropdown-user">
 								<li>
 									<div class="user-box">
@@ -52,7 +51,7 @@
 											<p class="text-muted">{{ request.user.email }}</p></div>
 										</div>
 									</li>
-									<div class="dropdown-divider"></div>
+
 									<a class="dropdown-item" href="#"><i class="ti-user"></i> My Profile</a>
 									<a class="dropdown-item" href="#"></i> My Balance</a>
 									<a class="dropdown-item" href="#"><i class="ti-email"></i> Inbox</a>
@@ -110,7 +109,7 @@
                 {% block content %}
                 {% endblock %}
 		</div>
-	</div>
+
 <script>
 	csrfToken="{{ csrf_token }}"
 </script>
@@ -136,7 +135,14 @@
 <script src="https://cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
 
 <script src="{% static 'assets/js/myscripts.js' %}"></script>
-
+<script>
+$("#mylogTable").dataTable({
+  columnDefs: [{
+    "defaultContent": "-",
+    "targets": "_all"
+  }]
+});
+</script>
 
 </body>
 </html>

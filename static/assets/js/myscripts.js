@@ -174,7 +174,7 @@ $(document).on('click', '#f_log', function() {
                         <td><input type="number" class="form-control td-length" id="${response[i]['id']}length" name="length" required value="${response[i]['length']}" step="0.25" min="0"></td>
                         <td><input type="number" class="form-control td-width" id="${response[i]['id']}width" name="width" required value="${response[i]['width']}" min="0" step=".01"></td>
                         <td><input type="number" class="form-control td-thickness" id="${response[i]['id']}thickness" name="thickness" required value="${response[i]['thickness']}" min="0" step=".01"></td>
-                        <td><input type="number" class="form-control td-cft" id="${response[i]['id']}cft" name="cft" readonly value="${response[i]['cft']}" min="0"></td>
+                        <td><input type="number" class="form-control td-cft" id="${response[i]['id']}cft" name="cft" readonly value="${response[i]['cft']}" min="0" step=".001"></td>
                         <td><a href="#" class="delete-row" data-finish-log-id="${response[i]['id']}"><i class="fa fa-trash"></i></a></td>
                     </tr>
                 `;

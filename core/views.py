@@ -164,7 +164,18 @@ class LogsListView(View):
     def get(self, request):
         """Handles GET request to display log."""
         logs = Log.objects.all()
-        return render(request, "logstables.html", {"logs": logs})
+
+        grouped_logs = {}
+
+        for log in logs:
+            container_number = log.container.container_number
+
+            if container_number not in grouped_logs:
+                grouped_logs[container_number] = []
+
+            grouped_logs[container_number].append(log)
+
+        return render(request, "logstables.html", {"grouped_logs": grouped_logs})
 
 
 class ContainerLogsView(View):

@@ -14,8 +14,13 @@
                                 <div id="accordion">
                                     {% for combination, logs, logs_count, length_counts in combination_logs %}
                                         <div class="card" style="margin-bottom: 0;">
-                                            <div class="card-header" id="heading{{ forloop.counter }}" style="padding:7px 5px">
-                                                <button class="btn truncate" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                                            <div class="card-header" id="heading{{ forloop.counter }}" style="padding: 7px 5px;">
+                                                <div class="d-flex position-relative"
+                                                     data-toggle="collapse"
+                                                     data-target="#collapse{{ forloop.counter }}"
+                                                     aria-expanded="true"
+                                                     aria-controls="collapse{{ forloop.counter }}"
+                                                     style="cursor: pointer;">
                                                     <style>
                                                         .truncate {
                                                             max-width: 1200px;
@@ -23,12 +28,30 @@
                                                             overflow: hidden;
                                                             text-overflow: ellipsis;
                                                         }
+
+                                                        .chevron-down-arrow {
+                                                            right: 12px !important;
+                                                            float: right;
+                                                            position: absolute;
+                                                            top: 10px;
+                                                            cursor: pointer;
+                                                            transition: color 0.3s ease;
+                                                        }
+
+                                                        .chevron-down-arrow:hover {
+                                                            color: blue; /* Change the color on hover */
+                                                        }
                                                     </style>
-                                                    Finished Logs Count: <span>{{ logs_count }}</span>,&nbsp; (width: <span>{{ combination.0 }}</span>, thickness: <span>{{ combination.1 }}</span>),&nbsp;
-                                                    {% for length, count in length_counts.items %}
-                                                        [Length: <span>{{ length }}</span>, Count: <span>{{ count }}</span>]
-                                                    {% endfor %}
-                                                </button>
+                                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                                        <span class="truncate">
+                                                            Finished Logs Count: <span>{{ logs_count }}</span>,&nbsp; (width: <span>{{ combination.0 }}</span>, thickness: <span>{{ combination.1 }}</span>),&nbsp;
+                                                            {% for length, count in length_counts.items %}
+                                                                [Length: <span>{{ length }}</span>, Count: <span>{{ count }}</span>]
+                                                            {% endfor %}
+                                                        </span>
+                                                    </div>
+                                                    <i class="fas fa-chevron-down chevron-down-arrow"></i> <!-- Font Awesome down arrow icon -->
+                                                </div>
                                             </div>
                                             <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordion">
                                                 <div class="card-body">

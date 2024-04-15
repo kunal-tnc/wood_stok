@@ -7,7 +7,7 @@ def calculate_net_avg(total_cbm, total_pieces):
     if total_pieces == 0:
         return Decimal("0.000")
     net_avg = (total_cbm * Decimal("35.315")) / Decimal(total_pieces)
-    return net_avg.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)
+    return net_avg.quantize(Decimal("0.000"), rounding=ROUND_HALF_UP)
 
 
 def calculate_totals(logs):

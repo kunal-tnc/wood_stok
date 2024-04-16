@@ -84,26 +84,26 @@
 						</div>
 					</div>
 					<ul class="nav">
-						<li class="nav-item">
-							<a href="/container/">
+						<li class="nav-item" id="dashboard">
+							<a href="/container/" onclick="setActive('dashboard')">
 								<i class="la la-dashboard"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
-						<li class="nav-item">
-							<a href="/logs/">
+						<li class="nav-item" id="logs">
+							<a href="/logs/" onclick="setActive('logs')">
 								<i class="la la-table"></i>
 								<p>Logs</p>
 							</a>
 						</li>
-                        <li class="nav-item">
-							<a href="/finishedlogs/">
+						<li class="nav-item" id="finishedlogs">
+							<a href="/finishedlogs/" onclick="setActive('finishedlogs')">
 								<i class="la la-table"></i>
 								<p>Finished Logs</p>
 							</a>
 						</li>
-						{% comment %} {% endcomment %}
 					</ul>
+
 				</div>
 			</div>
                 {% block content %}
@@ -142,6 +142,31 @@ $("#mylogTable").dataTable({
     "targets": "_all"
   }]
 });
+</script>
+<script>
+    function setActive(activeId) {
+        var navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(function(item) {
+            if (item.id === activeId) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    window.onload = function() {
+        var path = window.location.pathname;
+        var activeId = '';
+        if (path === '/container/') {
+            activeId = 'dashboard';
+        } else if (path === '/logs/') {
+            activeId = 'logs';
+        } else if (path === '/finishedlogs/') {
+            activeId = 'finishedlogs';
+        }
+        setActive(activeId);
+    };
 </script>
 
 </body>

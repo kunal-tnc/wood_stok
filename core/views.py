@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -7,7 +8,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import FormView, TemplateView
-from collections import defaultdict
+
 from .forms import *
 from .models import *
 from .utils import group_by_combination
@@ -201,6 +202,9 @@ class UpdateLogsView(View):
         return render(request, "logsform.html", {"form": form, "log": log})
 
     def put(self, request):
+        """
+        Handles PUT request to update log entries.
+        """
         try:
             data = json.loads(request.body)
             for log_id, values in data.items():
@@ -275,6 +279,9 @@ class SingleLogsView(View):
         return render(request, "logs_form.html", {"form": form})
 
     def post(self, request):
+        """
+        Handles POST request to create new log entries.
+        """
         container_id = request.POST.get("container")
 
         logs_data = (
@@ -367,7 +374,14 @@ class FinishedLogsInfoView(View):
 
 
 class FinishedLogsView(View):
+    """
+    A view to retrieve finished logs associated with a specific log entry.
+    """
+
     def get(self, request):
+        """
+        Handles GET request to retrieve finished logs associated with a specific log entry.
+        """
         id = request.GET.get("log_id")
         fin_logs = FinishedLog.objects.filter(log_id=id).values()
         logs_list = list(fin_logs)
@@ -387,16 +401,21 @@ class FinishedListView(View):
         for combination, logs in products_by_combination.items():
             length_counts = defaultdict(int)
             for log in logs:
-                length_counts[log['length']] += 1
+                length_counts[log["length"]] += 1
 
             length_counts = dict(length_counts)
             combination_logs.append((combination, logs, len(logs), length_counts))
 
-        return render(request, "finishedlogstable.html", {"combination_logs": combination_logs})
+        return render(
+            request, "finishedlogstable.html", {"combination_logs": combination_logs}
+        )
 
 
 class FinishedLogsList(View):
     def get(self, request):
+        """
+        A view to retrieve finished logs data for a given container ID.
+        """
         fin_log = []
         con_id = request.GET.get("cont_id")
 
@@ -420,7 +439,14 @@ class FinishedLogsList(View):
 
 
 class DeleteFinishedlogs(View):
+    """
+    A view to delete a finished log entry.
+    """
+
     def post(self, request, *args, **kwargs):
+        """
+        Handles POST request to delete a finished log entry.
+        """
         try:
             data = json.loads(request.body)
             finish_log_id = data.get("fin_log_id")

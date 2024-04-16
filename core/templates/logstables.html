@@ -11,21 +11,26 @@
                     <div class="card" style="margin-bottom: 0;">
                         <div id="accordion">
                             {% for container_number, logs in grouped_logs.items %}
-                                <div class="card mb-3">
-                                    <div class="card-header bg-light" id="heading{{ container_number }}" style="padding: 7px 5px;">
+
+                                    <div class="card-header bg-light" id="heading{{ container_number }}" style="padding: 2px 5px;">
                                         <div class="d-flex justify-content-between w-100"
                                              data-toggle="collapse"
                                              data-target="#collapse{{ container_number }}"
                                              aria-expanded="true"
                                              aria-controls="collapse{{ container_number }}">
+                                            <style>
+                                                .chevron-down-arrow:hover {
+                                                    color: blue;
+                                                }
+                                            </style>
                                             <h2 class="mb-0">
                                                 <button class="btn btn-link text-dark">
-                                                    <span>Container Number: {{ container_number }}</span>
+                                                    <span style="color: Black;">Container Number: {{ container_number }}</span>
                                                 </button>
                                             </h2>
                                             <div style="padding-right:20px;padding-top:20px;">
                                                 <span class="arrow-icon">
-                                                    <i class="fas fa-chevron-down"></i>
+                                                    <i class="fas fa-chevron-down chevron-down-arrow"></i>
                                                 </span>
                                             </div>
                                         </div>
@@ -57,7 +62,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+
                             {% endfor %}
                         </div>
                     </div>

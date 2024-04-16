@@ -195,57 +195,63 @@ $(document).ready(function() {
     }
 })
 //    6th script started
-document.getElementById("Fform").addEventListener("submit", function(event) {
-    event.preventDefault();
-    var finished_log = [];
+document.addEventListener('DOMContentLoaded', function() {
+    const formElement = document.getElementById("Fform");
+    if (formElement) {
+        formElement.addEventListener("submit", function(event) {
+            event.preventDefault();
+            var finished_log = [];
 
-    for (var i = 0; i < f_logs.length; i++) {
-        var f_length = document.getElementById(`${f_logs[i]}length`).value;
-        var f_width = document.getElementById(`${f_logs[i]}width`).value;
-        var f_thickness = document.getElementById(`${f_logs[i]}thickness`).value;
-        var f_cft = document.getElementById(`${f_logs[i]}cft`).value;
-        var finished_log_dict = {
-            'id': f_logs[i],
-            'length': f_length,
-            'width': f_width,
-            'thickness': f_thickness,
-            'cft': f_cft
-        };
-        finished_log.push(finished_log_dict);
+            for (var i = 0; i < f_logs.length; i++) {
+                var f_length = document.getElementById(`${f_logs[i]}length`).value;
+                var f_width = document.getElementById(`${f_logs[i]}width`).value;
+                var f_thickness = document.getElementById(`${f_logs[i]}thickness`).value;
+                var f_cft = document.getElementById(`${f_logs[i]}cft`).value;
+                var finished_log_dict = {
+                    'id': f_logs[i],
+                    'length': f_length,
+                    'width': f_width,
+                    'thickness': f_thickness,
+                    'cft': f_cft
+                };
+                finished_log.push(finished_log_dict);
+            }
+
+            for (var i = 1; i <= count; i++) {
+                var f_length = document.getElementById(`#${i}length`).value;
+                var f_width = document.getElementById(`#${i}width`).value;
+                var f_thickness = document.getElementById(`#${i}thickness`).value;
+                var f_cft = document.getElementById(`#${i}cft`).value;
+                var finished_log_dict = {
+                    'id': "#",
+                    'length': f_length,
+                    'width': f_width,
+                    'thickness': f_thickness,
+                    'cft': f_cft
+                };
+                finished_log.push(finished_log_dict);
+            }
+
+            count = 0;
+            $.ajax({
+                url: "/finished_logs_info/create/",
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                data: JSON.stringify({
+                    'log_id': activate_log_id,
+                    'finished_log': finished_log
+                }),
+                success: function(response) {
+                    $("#LogModalclose").click();
+                }
+            });
+        });
+    } else {
+        console.error("Element with ID 'Fform' not found");
     }
-
-    for (var i = 1; i <= count; i++) {
-
-        var f_length = document.getElementById(`#${i}length`).value;
-        var f_width = document.getElementById(`#${i}width`).value;
-        var f_thickness = document.getElementById(`#${i}thickness`).value;
-        var f_cft = document.getElementById(`#${i}cft`).value;
-        var finished_log_dict = {
-            'id': "#",
-            'length': f_length,
-            'width': f_width,
-            'thickness': f_thickness,
-            'cft': f_cft
-        };
-        finished_log.push(finished_log_dict);
-    }
-
-    count = 0;
-    $.ajax({
-        url: "/finished_logs_info/create/",
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        data: JSON.stringify({
-            'log_id': activate_log_id,
-            'finished_log': finished_log
-        }),
-        success: function(response) {
-            $("#LogModalclose").click();
-        }
-    });
 });
 
 $(document).on('change', '.td-length, .td-width, .td-thickness', function() {
@@ -263,7 +269,7 @@ $(document).on('change', '.td-length, .td-width, .td-thickness', function() {
 $(document).ready(function() {
     // Function to calculate CFT and CBM
     function calculateVolume() {
-        var conversionFactor = 35.3147;
+        var conversionFactor = 35.315;
         var length = parseFloat($('#lengthInput').val());
         var girth = parseFloat($('#girthInput').val());
 
@@ -410,7 +416,7 @@ $(document).on('click', '#tab3-tab', function() {
 // Calculate cft and cbm for data update case
 $(document).on('change', '.length-input, .girth-input', function() {
     var $tr = $(this).closest('tr');
-    var conversionFactor = 35.3147;
+    var conversionFactor = 35.315;
     var length = parseFloat($tr.find('.length-input').val());
     var girth = parseFloat($tr.find('.girth-input').val());
 

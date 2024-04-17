@@ -183,7 +183,7 @@
                                                 <tbody>
                                                     {% if form.instance.id %} {% for log in form.instance.logs.all %}
                                                     <tr class="log-row">
-                                                        <td>{{ log.reference_id }}</td>
+                                                        <td>{{ forloop.counter }}</td>
                                                         <td>
                                                             <input type="number" id="lengthInputs" value="{{ log.length }}" class="form-control length-input" name="log_{{log.id}}" min="0" required/>
                                                         </td>

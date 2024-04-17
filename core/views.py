@@ -382,10 +382,19 @@ class FinishedLogsView(View):
         """
         Handles GET request to retrieve finished logs associated with a specific log entry.
         """
-        id = request.GET.get("log_id")
-        fin_logs = FinishedLog.objects.filter(log_id=id).values()
-        logs_list = list(fin_logs)
-        return JsonResponse(logs_list, safe=False)
+        try:
+            log_id = request.GET.get("log_id")
+            if log_id:
+                fin_logs = FinishedLog.objects.filter(log_id=log_id).values()
+                logs_list = list(fin_logs)
+                logs_list = sorted(logs_list, key=lambda x: x['reference_id'])
+                return JsonResponse(logs_list, safe=False)
+            else:
+                return JsonResponse(
+                    {"success": False, "error": "No log ID provided"}
+                )
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
 
 
 class FinishedListView(View):
@@ -451,8 +460,18 @@ class DeleteFinishedlogs(View):
             data = json.loads(request.body)
             finish_log_id = data.get("fin_log_id")
             if finish_log_id:
-                finished_log = FinishedLog.objects.get(id=finish_log_id)
+                finished_log = get_object_or_404(FinishedLog, id=finish_log_id)
+                log_id = finished_log.log_id
                 finished_log.delete()
+
+                # Retrieve all finished logs for the same container ordered by reference_id
+                logs = FinishedLog.objects.filter(log_id=log_id).order_by("reference_id")
+
+                # Reset the reference_id for each log starting from 1
+                for index, log_entry in enumerate(logs, start=1):
+                    log_entry.reference_id = index
+                    log_entry.save()
+
                 return redirect("container_list")
             else:
                 return JsonResponse(

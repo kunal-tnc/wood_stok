@@ -69,7 +69,7 @@
                                                             <tbody>
                                                                 {% for log in logs %}
                                                                     <tr>
-                                                                        <td>{{ log.id }}</td>
+                                                                        <td>{{ forloop.counter }}</td>
                                                                         <td>{{ log.length }}</td>
                                                                         <td>{{ log.width }}</td>
                                                                         <td>{{ log.thickness }}</td>

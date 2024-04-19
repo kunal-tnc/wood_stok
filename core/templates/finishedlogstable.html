@@ -60,19 +60,19 @@
                                                         <table class="table table-condensed">
                                                             <thead>
                                                                 <tr>
-                                                                    <th scope="col">S No.</th>
-                                                                    <th scope="col">Length</th>
-                                                                    <th scope="col">Width</th>
-                                                                    <th scope="col">Thickness</th>
+                                                                    <th style="color: #000;" scope="col">S No.</th>
+                                                                    <th style="color: #000;" scope="col">Length</th>
+                                                                    <th style="color: #000;" scope="col">Width</th>
+                                                                    <th style="color: #000;" scope="col">Thickness</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 {% for log in logs %}
                                                                     <tr>
-                                                                        <td>{{ forloop.counter }}</td>
-                                                                        <td>{{ log.length }}</td>
-                                                                        <td>{{ log.width }}</td>
-                                                                        <td>{{ log.thickness }}</td>
+                                                                        <td style="color: #000;">{{ forloop.counter }}</td>
+                                                                        <td style="color: #000;">{{ log.length }}</td>
+                                                                        <td style="color: #000;">{{ log.width }}</td>
+                                                                        <td style="color: #000;">{{ log.thickness }}</td>
                                                                     </tr>
                                                                 {% empty %}
                                                                     <tr>

@@ -38,6 +38,10 @@ class Vendor(models.Model):
 
 
 class Container(models.Model):
+    STATUS_CHOICES = [
+        ('lock', 'Locked'),
+        ('draft', 'Draft'),
+    ]
     container_number = models.CharField(max_length=50, unique=True)
     pieces = models.IntegerField(default=0)
     ncbm = models.DecimalField(max_digits=20, decimal_places=2, default=0)
@@ -60,7 +64,7 @@ class Container(models.Model):
     sort_axis_navg = models.DecimalField(
         max_digits=20, decimal_places=3, default=0, null=True, blank=True
     )
-
+    status = models.CharField(max_length=5, choices=STATUS_CHOICES, default='draft')
     def __str__(self):
         return self.container_number
 

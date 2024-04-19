@@ -44,7 +44,11 @@ class CreateContainerView(View):
         """
         Handles POST request to create a new container.
         """
-        form = ContainerForm(request.POST)
+        mutable_post = request.POST.copy()
+
+        if 'status' not in mutable_post:
+            mutable_post['status'] = 'draft'
+        form = ContainerForm(mutable_post)
         if form.is_valid():
             form.save()
             return redirect("container_list")
@@ -84,16 +88,17 @@ class UpdateContainerView(View):
         """
         container = get_object_or_404(Container, pk=pk)
         form = ContainerForm(request.POST, instance=container)
+        form.fields.pop('status', None)
         if form.is_valid():
-            form.save()
+            container = form.save(commit=False)
+            container.save()
             container.calculate_sort_axis()
-            return redirect("container_list")
+            return redirect("update_container", pk=pk)
         else:
             vendors = Vendor.objects.all()
             return render(
                 request, "containerform.html", {"form": form, "vendors": vendors}
             )
-
 
 class DeleteContainerView(View):
     """
@@ -116,6 +121,17 @@ class DeleteContainerView(View):
         container_obj.delete()
         return JsonResponse({"message": "container deleted successfully"})
 
+class LockContainerView(View):
+    def post(self, request, *args, **kwargs):
+
+        container_id = request.POST.get('container_id')
+        try:
+            container = Container.objects.get(pk=container_id)
+            container.status = 'lock'
+            container.save()
+            return JsonResponse({'success': True, 'reload': True})
+        except Container.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Container not found'})
 
 class LogsFormView(View):
     """

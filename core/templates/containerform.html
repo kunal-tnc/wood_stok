@@ -8,18 +8,18 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-end align-items-center">
                             {% if form.instance.pk %}
-                                <div class="form-group">
-                                    <p class="fw-bold text-dark mb-0" style="margin-right: auto;">Container Number: <span class="text-primary">{{ form.instance.container_number }}</span></p>
-                                </div>
+                            <div class="form-group">
+                                <p class="fw-bold text-dark mb-0" style="margin-right: auto;">Container Number: <span class="text-primary">{{ form.instance.container_number }}</span></p>
+                            </div>
                             {% endif %}
                             <input type="hidden" name="log_exists" id="log_exists" value="{{ log_exists }}" />
                             <div>
                                 {% if form.instance.id %}
-                                    <form action="/container/logs/create/" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="container" value="{{ form.instance.id }}" />
-                                        <button class="btn btn-primary" id="logsExists" type="submit">Create Logs</button>
-                                    </form>
+                                <form action="/container/logs/create/" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="container" value="{{ form.instance.id }}" />
+                                    <button class="btn btn-primary" id="logsExists" type="submit">Create Logs</button>
+                                </form>
                                 {% endif %}
                             </div>
                         </div>
@@ -42,82 +42,107 @@
                                     <div class="card-body col-12">
                                         <form method="post">
                                             {% csrf_token %}
+                                            <style>
+                                                @media print {
+                                                    body * {
+                                                        visibility: hidden;
+                                                    }
+                                                    #contentToPrint, #contentToPrint * {
+                                                        visibility: visible;
+                                                    }
+                                                    #contentToPrint {
+                                                        position: absolute;
+                                                        left: 0;
+                                                        top: 0;
+                                                    }
+                                                }
+                                            </style>
+                                            <div id="contentToPrint">
                                             <div class="d-flex">
                                                 {% if not form.instance.pk %}
                                                 <div class="form-group col-6">
                                                     <label for="container_number" class="fw-bold">Container Number</label>
-                                                    <input type="text" class="form-control" value="{{ form.instance.container_number }}" id="container_number" name="container_number" placeholder="Enter Container Number" required> {% if form.errors.container_number %}
+                                                    <input type="text" class="form-control" value="{{ form.instance.container_number }}" id="container_number" name="container_number" placeholder="Enter Container Number" style="font-weight: bold; color: #000;" required> {% if form.errors.container_number %}
                                                     <p class="text-danger">{{ form.errors.container_number }}</p>
                                                     {% endif %}
                                                 </div>
                                                 {% endif %} {% if form.instance.pk %}
                                                 <div class="form-group col-6">
                                                     <label for="container_number" class="fw-bold">Container Number</label>
-                                                    <input type="text" class="form-control" value="{{ form.instance.container_number }}"  name="container_number" placeholder="Enter Container Number" readonly style="color: black;"> {% if form.errors.container_number %}
+                                                    <input type="text" class="form-control" value="{{ form.instance.container_number }}" name="container_number" placeholder="Enter Container Number" readonly style="font-weight: bold; color: #000;"> {% if form.errors.container_number %}
                                                     <p class="text-danger">{{ form.errors.container_number }}</p>
                                                     {% endif %}
                                                 </div>
                                                 {% endif %}
                                                 <div class="form-group col-6">
                                                     <label for="total_pieces" class="fw-bold">Total Pieces &nbsp;&nbsp;[As Per Actual measurement]</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.total_pieces }}" id="total_pieces" name="total_pieces" readonly style="color: black;">
+                                                    <input type="number" class="form-control" value="{{ form.instance.total_pieces }}" id="total_pieces" name="total_pieces" readonly style="font-weight: bold; color: #000;">
                                                 </div>
                                             </div>
                                             <div class="d-flex">
                                                 <div class="form-group col-6">
                                                     <label for="ncbm" class="fw-bold">NCBM</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.ncbm }}" id="ncbm" name="ncbm" step="0.01" min="0" required>
+                                                    {% if form.instance.status == 'lock' %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.ncbm }}" name="ncbm" step="0.01" min="0" readonly style="font-weight: bold; color: #000;"> {% else %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.ncbm }}" id="ncbm" name="ncbm" step="0.01" min="0" required style="font-weight: bold; color: #000;"> {% endif %}
                                                 </div>
                                                 <div class="form-group col-6">
                                                     <label for="total_cbm" class="fw-bold">Total CBM &nbsp;&nbsp;[As Per Actual measurement]</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.total_cbm }}" id="total_cbm" name="total_cbm" readonly style="color: black;">
+                                                    <input type="number" class="form-control" value="{{ form.instance.total_cbm }}" id="total_cbm" name="total_cbm" readonly style="font-weight: bold; color: #000;">
                                                 </div>
                                             </div>
                                             <div class="d-flex">
                                                 <div class="form-group col-6">
                                                     <label for="navg" class="fw-bold">NAVG</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.navg }}" id="navg" name="navg" step="0.01" min="0" required>
+                                                    {% if form.instance.status == 'lock' %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.navg }}" name="navg" step="0.01" min="0" readonly style="font-weight: bold; color: #000;"> {% else %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.navg }}" id="navg" name="navg" step="0.01" min="0" required style="font-weight: bold; color: #000;"> {% endif %}
                                                 </div>
 
                                                 <div class="form-group col-6">
                                                     <label for="a_navg" class="fw-bold">Total NAVG &nbsp;&nbsp;[As Per Actual measurement]</label>
-                                                    <input type="number" class="form-control" id="a_navg" value="{{ form.instance.a_navg }}" name="a_navg" readonly style="color: black;">
+                                                    <input type="number" class="form-control" id="a_navg" value="{{ form.instance.a_navg }}" name="a_navg" readonly style="font-weight: bold; color: #000;">
                                                 </div>
                                             </div>
                                             <div class="d-flex">
                                                 <div class="form-group col-6">
                                                     <label for="rate" class="fw-bold">Rate</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.rate }}" id="rate" name="rate" min="0" required>
+                                                    {% if form.instance.status == 'lock' %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.rate }}" name="rate" min="0" readonly style="font-weight: bold; color: #000;"> {% else %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.rate }}" id="rate" name="rate" min="0" required style="font-weight: bold; color: #000;"> {% endif %}
                                                 </div>
                                                 <div class="form-group col-6">
                                                     <label for="sort_axis_pieces" class="fw-bold">Sort/Axis Pieces &nbsp;&nbsp;[As Per Actual calculate]</label>
                                                     <input type="number" class="form-control {% if form.instance.sort_axis_pieces >= 0 %}is-valid{% elif form.instance.sort_axis_pieces < 0 %}is-invalid{% endif %}" id="sort_axis_pieces" value="{{ form.instance.sort_axis_pieces }}" name="sort_axis_pieces"
-                                                    readonly style="color:
-                                                    {% if form.instance.sort_axis_pieces == 0 %}black
-                                                    {% elif form.instance.sort_axis_pieces >= 0 %}darkgreen
-                                                    {% else %}darkred
-                                                    {% endif %};">
+                                                    readonly style="font-weight: bold; color:
+                                                {% if form.instance.sort_axis_pieces == 0 %}black
+                                                {% elif form.instance.sort_axis_pieces >= 0 %}darkgreen
+                                                {% else %}darkred
+                                                {% endif %};">
                                                 </div>
                                             </div>
                                             <div class="d-flex">
                                                 <div class="form-group col-6">
                                                     <label for="pieces" class="fw-bold">Pieces</label>
-                                                    <input type="number" class="form-control" value="{{ form.instance.pieces }}" id="pieces" name="pieces" required>
+                                                    {% if form.instance.status == 'lock' %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.pieces }}" name="pieces" readonly style="font-weight: bold; color: #000;"> {% else %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.pieces }}" id="pieces" name="pieces" required style="font-weight: bold; color: #000;"> {% endif %}
                                                 </div>
                                                 <div class="form-group col-6">
                                                     <label for="sort_axis_cbm" class="fw-bold">Sort/Axis CBM &nbsp;&nbsp;[As Per Actual calculate]</label>
-                                                    <input type="number" class="form-control" id="sort_axis_cbm" value="{{ form.instance.sort_axis_cbm }}" name="sort_axis_cbm" readonly style="color:
-                                                    {% if form.instance.sort_axis_cbm == 0 %}black
-                                                    {% elif form.instance.sort_axis_cbm >= 0 %}darkgreen
-                                                    {% else %}darkred
-                                                    {% endif %};">
+                                                    <input type="number" class="form-control" id="sort_axis_cbm" value="{{ form.instance.sort_axis_cbm }}" name="sort_axis_cbm" readonly style="font-weight: bold; color:
+                                                {% if form.instance.sort_axis_cbm == 0 %}black
+                                                {% elif form.instance.sort_axis_cbm >= 0 %}darkgreen
+                                                {% else %}darkred
+                                                {% endif %};">
                                                 </div>
 
                                             </div>
                                             <div class="d-flex">
                                                 <div class="form-group col-6">
                                                     <label for="vendor" class="fw-bold">Vendor</label>
-                                                    <select class="form-control" id="vendor" name="vendor" required>
+                                                    {% if form.instance.status == 'lock' %}
+                                                    <select class="form-control" name="vendor" style="font-weight: bold; color: #000;" disabled>
                                                         {% if form.instance.vendor %} {% for vendor in vendors %} {% if vendor.id == form.instance.vendor.id %}
                                                         <option value="{{ vendor.id }}" selected>{{ vendor.name }}</option>
                                                         {% else %}
@@ -128,15 +153,28 @@
                                                         <option value="{{ vendor.id }}">{{ vendor.name }}</option>
                                                         {% endfor %} {% endif %}
                                                     </select>
+                                                    {% else %}
+                                                    <select class="form-control" id="vendor" name="vendor" style="font-weight: bold; color: #000;" required>
+                                                        {% if form.instance.vendor %} {% for vendor in vendors %} {% if vendor.id == form.instance.vendor.id %}
+                                                        <option value="{{ vendor.id }}" selected>{{ vendor.name }}</option>
+                                                        {% else %}
+                                                        <option value="{{ vendor.id }}">{{ vendor.name }}</option>
+                                                        {% endif %} {% endfor %} {% else %}
+                                                        <option value="" selected>None</option>
+                                                        {% for vendor in vendors %}
+                                                        <option value="{{ vendor.id }}">{{ vendor.name }}</option>
+                                                        {% endfor %} {% endif %}
+                                                    </select>
+                                                    {% endif %}
                                                 </div>
                                                 <div class="form-group col-6">
                                                     <label for="sort_axis_navg" class="fw-bold">Sort/Axis NAVG &nbsp;&nbsp;[As Per Actual calculate]</label>
-                                                    <input type="number" class="form-control {% if form.instance.sort_axis_navg >= 0 %}is-valid{% elif form.instance.sort_axis_navg < 0 %}is-invalid{% endif %}" id="sort_axis_navg" value="{{ form.instance.sort_axis_navg }}" name="sort_axis_navg"
-                                                    readonly style="color:
-                                                    {% if form.instance.sort_axis_navg == 0 %}black
-                                                    {% elif form.instance.sort_axis_navg >= 0 %}darkgreen
-                                                    {% else %}darkred
-                                                    {% endif %};">
+                                                    <input type="number" class="form-control {% if form.instance.sort_axis_navg >= 0 %}is-valid{% elif form.instance.sort_axis_navg < 0 %}is-invalid{% endif %}" id="sort_axis_navg" value="{{ form.instance.sort_axis_navg }}" name="sort_axis_navg" readonly
+                                                    style="font-weight: bold; color:
+                                                {% if form.instance.sort_axis_navg == 0 %}black
+                                                {% elif form.instance.sort_axis_navg >= 0 %}darkgreen
+                                                {% else %}darkred
+                                                {% endif %};">
                                                 </div>
 
                                             </div>
@@ -144,28 +182,38 @@
 
                                                 <div class="form-group col-6">
                                                     <label for="amount" class="fw-bold">Amount</label>
-                                                    <input type="number" class="form-control" id="amount" value="{{ form.instance.amount }}" name="amount" min="0" required>
+                                                    {% if form.instance.status == 'lock' %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.amount }}" name="amount" min="0" readonly style="font-weight: bold; color: #000;"> {% else %}
+                                                    <input type="number" class="form-control" id="amount" value="{{ form.instance.amount }}" name="amount" min="0" required style="font-weight: bold; color: #000;"> {% endif %}
                                                 </div>
 
                                             </div>
+                                            </div>
+                                            <button id="submit-button" type="submit" class="btn btn-success py-2 float-right mb-2" style="width:auto; font-size:18px">Submit</button>
 
-                                            <button type="submit" class="btn btn-success py-2 float-right mb-2" style="width:auto; font-size:18px">Submit</button>
                                             <button type="button" class="btn btn-danger py-2 float-right mr-2 mb-2" style="width:auto; color:white; font-size:18px;" onclick="window.location.href='/container/'">
                                                 Cancel
                                             </button>
+                                            {% if form.instance.pk %}
+                                            <button id="printButton" class="btn btn-info py-2 float-right mr-2" style="width:auto; font-size:18px">Print</button>
+                                            <button type="button" class="btn btn-secondary py-2 float-right mr-2" id="lock-button" style="width:auto; font-size:18px">Lock Container</button>
+                                            <input type="hidden" name="container" id="container_id" value="{{ form.instance.id }}" /> {% endif %}
 
                                         </form>
 
                                     </div>
                                 </div>
                                 <div class="tab-pane fade " id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                                    {% if form.instance.status == 'draft' %}
                                     <div class="d-flex justify-content-end py-3">
                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#newLogModal">
                                             Add New Log
                                         </button>
                                         <button class="btn btn-success ml-2" id="save-table-data" data-csrf-token="{{ csrf_token }}">Save</button>
                                     </div>
-
+                                    {% else %}
+                                    <div></div>
+                                    {% endif %}
 
                                     <form id="table-data">
                                         <div class="table-responsive">
@@ -177,7 +225,11 @@
                                                         <th scope="col">Girth</th>
                                                         <th scope="col">CFT</th>
                                                         <th scope="col">CBM</th>
+                                                        {% if form.instance.status == 'draft' %}
                                                         <th scope="col">Actions</th>
+                                                        {% else %}
+                                                        <th scope="col"></th>
+                                                        {% endif %}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -185,23 +237,34 @@
                                                     <tr class="log-row">
                                                         <td>{{ forloop.counter }}</td>
                                                         <td>
-                                                            <input type="number" id="lengthInputs" value="{{ log.length }}" class="form-control length-input" name="log_{{log.id}}" min="0" required/>
+                                                            {% if form.instance.status == 'draft' %}
+                                                            <input type="number" value="{{ log.length }}" class="form-control length-input" name="log_{{log.id}}" min="0" style="font-weight: bold; color: #000;" required/>
+                                                            {% else %}
+                                                            <input type="number" id="lengthInputs" value="{{ log.length }}" class="form-control length-input" name="log_{{log.id}}" min="0" style="font-weight: bold; color: #000;" readonly/>
+                                                            {% endif %}
                                                         </td>
                                                         <td>
-                                                            <input type="number" id="girthInputs" value="{{ log.girth }}" class="form-control girth-input" name="log_{{log.id}}" min="0" required/>
+                                                            {% if form.instance.status == 'draft' %}
+                                                            <input type="number" value="{{ log.girth }}" class="form-control girth-input" name="log_{{log.id}}" min="0" style="font-weight: bold; color: #000;" required/>
+                                                            {% else %}
+                                                            <input type="number" id="girthInputs" value="{{ log.girth }}" class="form-control girth-input" name="log_{{log.id}}" min="0" style="font-weight: bold; color: #000;" readonly/>
+                                                            {% endif %}
                                                         </td>
                                                         <td>
-                                                            <input type="number" id="cftInputs" value="{{ log.cft }}" class="form-control cft-input" name="log_{{log.id}}" min="0" step=".001" readonly style="color: black;" />
+                                                            <input type="number" id="cftInputs" value="{{ log.cft }}" class="form-control cft-input" name="log_{{log.id}}" min="0" step=".001" readonly style="font-weight: bold; color: #000;" />
                                                         </td>
                                                         <td>
-                                                            <input type="number" id="cbmInputs" value="{{ log.cbm }}" class="form-control cbm-input" name="log_{{log.id}}" min="0" step=".001" readonly style="color: black;" />
+                                                            <input type="number" id="cbmInputs" value="{{ log.cbm }}" class="form-control cbm-input" name="log_{{log.id}}" min="0" step=".001" readonly style="font-weight: bold; color: #000;" />
                                                         </td>
                                                         <td>
                                                             <div class="d-flex justify-between gap-4">
+                                                                {% if form.instance.status == 'draft' %}
                                                                 <div>
                                                                     <button type="button" class="btn btn-success mr-4" id="f_log" value="{{ log.id }}" data-toggle="modal" data-target="#addLogModal">Finished Logs</button>
                                                                 </div>
-
+                                                                {% else %}
+                                                                <div></div>
+                                                                {% endif %}
                                                                 <!--                                                                <div class="d-inline-flex">-->
                                                                 <!--                                                                    <button class="green-button delete-log-button" style="background-color: #ff6666; width: 30px; height: 30px; border-radius: 50%; border: none;" data-log-id="{{ log.id }}" data-csrf-token="{{ csrf_token }}">-->
                                                                 <!--                                                                        <a href="{% url 'delete_container_log' log.id %}" class="d-flex justify-content-center align-items-center" style="width: 100%; height: 100%;">-->

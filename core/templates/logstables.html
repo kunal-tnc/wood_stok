@@ -42,19 +42,19 @@
                                                 <table class="table table-condensed">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">SNO</th>
-                                                            <th scope="col">Length</th>
-                                                            <th scope="col">Girth</th>
-                                                            <th scope="col">CBM</th>
+                                                            <th style="color: #000;" scope="col">SNO</th>
+                                                            <th style="color: #000;" scope="col">Length</th>
+                                                            <th style="color: #000;" scope="col">Girth</th>
+                                                            <th style="color: #000;" scope="col">CBM</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {% for log in logs %}
                                                             <tr>
-                                                                <td>{{ forloop.counter }}</td>
-                                                                <td>{{ log.length }}</td>
-                                                                <td>{{ log.girth }}</td>
-                                                                <td>{{ log.cbm }}</td>
+                                                                <td style="color: #000;" >{{ forloop.counter }}</td>
+                                                                <td style="color: #000;">{{ log.length }}</td>
+                                                                <td style="color: #000;">{{ log.girth }}</td>
+                                                                <td style="color: #000;">{{ log.cbm }}</td>
                                                             </tr>
                                                         {% endfor %}
                                                     </tbody>

@@ -63,7 +63,7 @@ $(document).on('click', '#add-more', function() {
             <td><input type="number" class="form-control td-length" name="length" id="#${count}length" step="0.25" min="0" required></td>
             <td><input type="number" class="form-control td-width" name="width" id="#${count}width" min="0" step=".01" required></td>
             <td><input type="number" class="form-control td-thickness" name="height" id="#${count}thickness" min="0" step=".01" required></td>
-            <td><input type="number" class="form-control td-cft" name="cft" id="#${count}cft" min="0" readonly></td>
+            <td><input type="number" class="form-control td-cft" name="cft" id="#${count}cft" min="0" readonly style="font-weight: bold; color: #000;"></td>
             <td><a href="#"><i class="fa fa-trash delete-row"/></a></td>
         </tr>
         `;
@@ -174,7 +174,7 @@ $(document).on('click', '#f_log', function() {
                         <td><input type="number" class="form-control td-length" id="${response[i]['id']}length" name="length" required value="${response[i]['length']}" step="0.25" min="0"></td>
                         <td><input type="number" class="form-control td-width" id="${response[i]['id']}width" name="width" required value="${response[i]['width']}" min="0" step=".01"></td>
                         <td><input type="number" class="form-control td-thickness" id="${response[i]['id']}thickness" name="thickness" required value="${response[i]['thickness']}" min="0" step=".01"></td>
-                        <td><input type="number" class="form-control td-cft" id="${response[i]['id']}cft" name="cft" readonly value="${response[i]['cft']}" min="0"></td>
+                        <td><input type="number" class="form-control td-cft" id="${response[i]['id']}cft" name="cft" readonly value="${response[i]['cft']}" min="0" style="font-weight: bold; color: #000;"></td>
                         <td><a href="#" class="delete-row" data-finish-log-id="${response[i]['id']}"><i class="fa fa-trash"></i></a></td>
                     </tr>
                 `;
@@ -439,3 +439,79 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Element with ID "tab1-tab" not found');
     }
 });
+//  12th scripted started
+
+$(document).on('click', '#lock-button', function(){
+
+    console.log('Lock container function called');
+    var containerId = $('#container_id').val();
+
+    $.ajax({
+        type: 'POST',
+        url: '/lock-container/',
+        data: {
+            'container_id': containerId,
+            'csrfmiddlewaretoken': csrfToken,
+        },
+
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Container locked successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(function() {
+                    window.location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to lock container',
+                    text: response.error
+                });
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.error('Failed to lock container:', errorThrown);
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to lock container',
+                text: 'An error occurred while trying to lock the container.'
+            });
+        }
+    });
+});
+
+$('#submit-button').click(function(event) {
+    // Show SweetAlert message
+    Swal.fire({
+        icon: 'success',
+        title: 'Container Successfully',
+        showConfirmButton: false,
+        timer: 8000
+    });
+});
+
+//  13th scripted started
+document.addEventListener("DOMContentLoaded", function() {
+    var printButton = document.getElementById("printButton");
+    var contentToPrint = document.getElementById("contentToPrint");
+
+    if (printButton) {
+        printButton.addEventListener("click", function() {
+            printDiv(contentToPrint);
+        });
+    }
+});
+
+function printDiv(divId) {
+    var printContents = divId.innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}

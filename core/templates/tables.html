@@ -20,28 +20,29 @@
                                 <table id="myTable" class="table table-condensed">
                                     <thead>
                                         <tr>
-                                            <th scope="col">S No.</th>
-                                            <th scope="col">Container No.</th>
-                                            <th scope="col">Pcs</th>
-                                            <th scope="col">NCBM</th>
-                                            <th scope="col">NAVG</th>
-                                            <th scope="col">Rate</th>
-                                            <th scope="col">Amount</th>
-                                            <th scope="col">Vendor</th>
-                                            <th scope="col">Action</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">S No.</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Container No.</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Vendor</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Rate</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Amount</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">NCBM</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">NAVG</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Pcs</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for container in containers %}
                                         <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ container.container_number}}</td>
-                                            <td>{{ container.pieces }}</td>
-                                            <td>{{ container.ncbm }}</td>
-                                            <td>{{ container.navg }}</td>
-                                            <td>{{ container.rate }}</td>
-                                            <td>{{ container.amount }}</td>
-											<td>{{ container.vendor }}</td>
+                                            <td style="color: #000;">{{ container.id }}</td>
+                                            <td style="color: #000;">{{ container.container_number }}</td>
+                                            <td style="color: #000;">{{ container.vendor }}</td>
+                                            <td style="color: #000;">{{ container.rate }}</td>
+                                            <td style="color: #000;">{{ container.amount }}</td>
+                                            <td style="color: #000;">{{ container.ncbm }}</td>
+                                            <td style="color: #000;">{{ container.navg }}</td>
+                                            <td style="color: #000;">{{ container.pieces }}</td>
+
                                             <td>
                                                 <span style="display: flex; gap: 5px;">
                                                     <button class="green-button" style="background-color: #00b359; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: none;">

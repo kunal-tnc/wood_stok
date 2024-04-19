@@ -16,6 +16,7 @@ urlpatterns = [
         DeleteContainerView.as_view(),
         name="delete_container",
     ),
+    path('lock-container/', LockContainerView.as_view(), name='lock_container'),
     # Log-related URLs
     path("logs/", LogsListView.as_view(), name="log_list"),
     path(

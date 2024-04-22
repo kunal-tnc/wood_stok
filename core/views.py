@@ -441,7 +441,7 @@ class FinishedLogsList(View):
         """
         A view to retrieve finished logs data for a given container ID.
         """
-        fin_log = []
+        fin_logs_grouped = defaultdict(list)
         con_id = request.GET.get("cont_id")
 
         logs_data = Log.objects.filter(container_id=con_id).prefetch_related(
@@ -450,6 +450,7 @@ class FinishedLogsList(View):
 
         for log in logs_data:
             for f_log in log.finishedlog_set.all():
+                key = (str(f_log.width), str(f_log.thickness))
                 data = {
                     "log_no": log.reference_id,
                     "finished_log_no": f_log.reference_id,
@@ -458,9 +459,17 @@ class FinishedLogsList(View):
                     "thickness": float(f_log.thickness),
                     "cft": float(f_log.cft),
                 }
-                fin_log.append(data)
+                fin_logs_grouped[key].append(data)
 
-        return JsonResponse(fin_log, safe=False)
+
+        fin_logs_grouped_str = {json.dumps(k): v for k, v in fin_logs_grouped.items()}
+
+        # Preprocess the data to extract width and thickness
+        processed_logs = [
+            {"width": json.loads(key)[0], "thickness": json.loads(key)[1], "logs": logs}
+            for key, logs in fin_logs_grouped_str.items()
+        ]
+        return JsonResponse(processed_logs, safe=False)
 
 
 class DeleteFinishedlogs(View):

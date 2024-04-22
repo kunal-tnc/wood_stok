@@ -126,7 +126,7 @@
                                                     <label for="pieces" class="fw-bold">Pieces</label>
                                                     {% if form.instance.status == 'lock' %}
                                                     <input type="number" class="form-control" value="{{ form.instance.pieces }}" name="pieces" readonly style="font-weight: bold; color: #000;"> {% else %}
-                                                    <input type="number" class="form-control" value="{{ form.instance.pieces }}" id="pieces" name="pieces" required style="font-weight: bold; color: #000;"> {% endif %}
+                                                    <input type="number" class="form-control" value="{{ form.instance.pieces }}" id="pieces" name="pieces" required style="font-weight: bold; color: #000;" min="0"> {% endif %}
                                                 </div>
                                                 <div class="form-group col-6">
                                                     <label for="sort_axis_cbm" class="fw-bold">Sort/Axis CBM &nbsp;&nbsp;[As Per Actual calculate]</label>
@@ -190,14 +190,14 @@
                                             </div>
                                             </div>
                                             <button id="submit-button" type="submit" class="btn btn-success py-2 float-right mb-2" style="width:auto; font-size:18px">Submit</button>
-
-                                            <button type="button" class="btn btn-danger py-2 float-right mr-2 mb-2" style="width:auto; color:white; font-size:18px;" onclick="window.location.href='/container/'">
+                                            <button type="button" class="btn btn-danger py-2 float-right mb-2 mr-2" style="width:auto; color:white; font-size:18px;" onclick="window.location.href='/container/'">
                                                 Cancel
                                             </button>
                                             {% if form.instance.pk %}
-                                            <button id="printButton" class="btn btn-info py-2 float-right mr-2" style="width:auto; font-size:18px">Print</button>
-                                            <button type="button" class="btn btn-secondary py-2 float-right mr-2" id="lock-button" style="width:auto; font-size:18px">Lock Container</button>
-                                            <input type="hidden" name="container" id="container_id" value="{{ form.instance.id }}" /> {% endif %}
+                                            <button id="printButton" class="btn btn-info py-2 float-right mb-2 mr-2" style="width:auto; font-size:18px">Print</button>
+                                            <button type="button" class="btn btn-secondary py-2 float-right mb-2 mr-2" id="lock-button" style="width:auto; font-size:18px">Lock Container</button>
+                                            <input type="hidden" name="container" id="container_id" value="{{ form.instance.id }}" />
+                                            {% endif %}
 
                                         </form>
 
@@ -392,35 +392,7 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
-                                    <form>
-                                        <div class="table-responsive">
-                                            <table class="table table-condensed w-100" id="finished_log_table">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Log No</th>
-                                                        <th scope="col">Finished Log No</th>
-                                                        <th scope="col">Length</th>
-                                                        <th scope="col">Width</th>
-                                                        <th scope="col">Thickness</th>
-                                                        <th scope="col">CFT</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% for fi_log in fin_log %}
-                                                    <tr>
-                                                        <td>{{ fi_log.log_no }}</td>
-                                                        <td>{{ fi_log.finished_log_no }}</td>
-                                                        <td>{{ fi_log.length }}</td>
-                                                        <td>{{ fi_log.width }}</td>
-                                                        <td>{{ fi_log.thickness }}</td>
-                                                        <td>{{ fi_log.cft }}</td>
-                                                    </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                    </form>
+                                    <div id="accordion"></div>
                                 </div>
                             </div>
 

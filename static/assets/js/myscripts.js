@@ -377,40 +377,99 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 //  10th scripted started
+$(document).ready(function() {
+            $('#tab3-tab').on('click', function() {
+                var cont_id = $('#cont_id').val();
 
-$(document).on('click', '#tab3-tab', function() {
+                $.ajax({
+                    url: "/finished-logs/",
+                    method: 'GET',
+                    data: {
+                        'cont_id': cont_id
+                    },
 
-    var cont_id = $('#cont_id').val();
+                    success: function(response) {
+                        // Clear existing accordion items
+                        $('#accordion').empty();
 
-    $("#finished_log_table tr:not(:first-child)").remove();
-    $.ajax({
-        url: "/finished-logs/",
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        data: {
-            'cont_id': cont_id
-        },
-        success: function(response) {
+                        // Iterate through the response data and create accordion items
+                        response.forEach(function(item, index) {
+                            var accordionItem = `
+                                <div class="card-header" id="heading${index}" style="padding: 2px 5px;">
+                                    <style>
+                                        .chevron-down-arrow {
+                                            float: right;
+                                            right: 20px !important;
+                                            position: absolute;
+                                            cursor: pointer;
+                                            transition: color 0.3s ease;
+                                        }
+                                        .chevron-down-arrow:hover {
+                                                            color: blue;
+                                                        }
+                                        /* Adjust padding and font-size for smaller screens */
+                                        @media (max-width: 768px) {
+                                            .card-header {
+                                                padding: 10px;
+                                            }
+                                            .btn {
+                                                font-size: 14px;
+                                            }
+                                        }
+                                    </style>
+                                    <h5 class="mb-0">
+                                        <button class="btn" data-toggle="collapse" data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}" style="background-color: white;">
+                                            Width: ${item.width}, &nbsp;&nbsp;&nbsp; Thickness: ${item.thickness}
+                                            <i class="fas fa-chevron-down chevron-down-arrow"></i>
+                                        </button>
+                                    </h5>
+                                </div>
 
-            for (var i = 0; i < response.length; i++) {
-                var dynamicRow = `
-                    <tr>
-                        <td>${response[i]['log_no']}</td>
-                        <td>${response[i]['finished_log_no']}</td>
-                        <td>${response[i]['length']}</td>
-                        <td>${response[i]['width']}</td>
-                        <td>${response[i]['thickness']}</td>
-                        <td>${response[i]['cft']}</td>
-                    </tr>
-                `;
-                $("#finished_log_table").append(dynamicRow);
-            }
-        }
-    });
-});
+                                <div id="collapse${index}" class="collapse" aria-labelledby="heading${index}" data-parent="#accordion">
+                                    <div class="card-body">
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="color: #000;">Log No</th>
+                                                    <th style="color: #000;">Finished Log No</th>
+                                                    <th style="color: #000;">Length</th>
+                                                    <th style="color: #000;">Width</th>
+                                                    <th style="color: #000;">Thickness</th>
+                                                    <th style="color: #000;">CFT</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${item.logs.map(log => `
+                                                    <tr>
+                                                        <td style="color: #000;">${log.log_no}</td>
+                                                        <td style="color: #000;">${log.finished_log_no}</td>
+                                                        <td style="color: #000;">${log.length}</td>
+                                                        <td style="color: #000;">${log.width}</td>
+                                                        <td style="color: #000;">${log.thickness}</td>
+                                                        <td style="color: #000;">${log.cft}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            `;
+                            $('#accordion').append(accordionItem);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            // Bind click event to toggle collapse when clicking the down arrow
+            $(document).on('click', '.chevron-down-arrow', function() {
+                var target = $(this).data('target');
+                $(target).collapse('toggle');
+            });
+        });
 
 //  11th scripted started
 // Calculate cft and cbm for data update case

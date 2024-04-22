@@ -41,11 +41,11 @@
 
 						</li>
 						<li class="nav-item dropdown">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="{% static 'assets/img/profile.jpg' %}"  alt="user-img" width="36" class="img-circle"><span>{{ request.user.username }}</span></a>
+							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="{% static 'assets/img/userp.png' %}"  alt="user-img" width="36" class="img-circle"><span>{{ request.user.username }}</span></a>
 							<ul class="dropdown-menu dropdown-user">
 								<li>
 									<div class="user-box">
-										<div class="u-img"><img src="{% static 'assets/img/profile.jpg' %}"  alt="user"></div>
+										<div class="u-img"><img src="{% static 'assets/img/userp.png' %}"  alt="user"></div>
 										<div class="u-text">
 											<h4>{{ request.user.username }}</h4>
 											<p class="text-muted">{{ request.user.email }}</p></div>
@@ -69,7 +69,7 @@
 				<div class="scrollbar-inner sidebar-wrapper">
 					<div class="user">
 						<div class="photo">
-							<img src="{% static 'assets/img/profile.jpg' %}">
+							<img src="{% static 'assets/img/userp.png' %}">
 						</div>
 						<div class="info">
 							<a class="" data-toggle="collapse" aria-expanded="true">
@@ -87,19 +87,19 @@
 						<li class="nav-item" id="dashboard">
 							<a href="/container/" onclick="setActive('dashboard')">
 								<i class="la la-dashboard"></i>
-								<p>Dashboard</p>
+								<p style="color: dark;">Containers</p>
 							</a>
 						</li>
 						<li class="nav-item" id="logs">
 							<a href="/logs/" onclick="setActive('logs')">
 								<i class="la la-table"></i>
-								<p>Logs</p>
+								<p style="color: dark;">Logs</p>
 							</a>
 						</li>
 						<li class="nav-item" id="finishedlogs">
 							<a href="/finishedlogs/" onclick="setActive('finishedlogs')">
 								<i class="la la-table"></i>
-								<p>Finished Logs</p>
+								<p style="color: dark;">Finished Logs</p>
 							</a>
 						</li>
 					</ul>
@@ -131,7 +131,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/6.0.0/bootbox.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 <script src="https://cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>

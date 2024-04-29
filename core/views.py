@@ -3,6 +3,7 @@ from collections import defaultdict
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -46,8 +47,8 @@ class CreateContainerView(View):
         """
         mutable_post = request.POST.copy()
 
-        if 'status' not in mutable_post:
-            mutable_post['status'] = 'draft'
+        if "status" not in mutable_post:
+            mutable_post["status"] = "draft"
         form = ContainerForm(mutable_post)
         if form.is_valid():
             form.save()
@@ -88,7 +89,7 @@ class UpdateContainerView(View):
         """
         container = get_object_or_404(Container, pk=pk)
         form = ContainerForm(request.POST, instance=container)
-        form.fields.pop('status', None)
+        form.fields.pop("status", None)
         if form.is_valid():
             container = form.save(commit=False)
             container.save()
@@ -99,6 +100,7 @@ class UpdateContainerView(View):
             return render(
                 request, "containerform.html", {"form": form, "vendors": vendors}
             )
+
 
 class DeleteContainerView(View):
     """
@@ -121,17 +123,34 @@ class DeleteContainerView(View):
         container_obj.delete()
         return JsonResponse({"message": "container deleted successfully"})
 
-class LockContainerView(View):
-    def post(self, request, *args, **kwargs):
 
-        container_id = request.POST.get('container_id')
+class LockContainerView(View):
+    """
+    View for locking a container.
+
+    This view locks a container identified by its ID.
+    """
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST request to lock a container.
+        """
+
+        container_id = request.POST.get("container_id")
         try:
             container = Container.objects.get(pk=container_id)
-            container.status = 'lock'
+            container.status = "lock"
             container.save()
-            return JsonResponse({'success': True, 'reload': True})
+            return JsonResponse(
+                {
+                    "success": True,
+                    "message": "Container locked successfully",
+                    "reload": True,
+                }
+            )
         except Container.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Container not found'})
+            return JsonResponse({"success": False, "error": "Container not found"})
+
 
 class LogsFormView(View):
     """
@@ -178,6 +197,12 @@ class LogsFormView(View):
 
 
 class LogsListView(View):
+    """
+    View for displaying logs.
+
+    This view retrieves logs from the database and groups them by container number for display.
+    """
+
     def get(self, request):
         """Handles GET request to display log."""
         logs = Log.objects.all()
@@ -196,7 +221,16 @@ class LogsListView(View):
 
 
 class ContainerLogsView(View):
+    """
+    View for displaying logs of a specific container.
+
+    This view retrieves logs associated with a specific container ID and renders them in a template.
+    """
+
     def get(self, request, container_id):
+        """
+        Handle GET request to display logs of a specific container.
+        """
         logs = Log.objects.filter(container_id=container_id)
         context = {
             "logs": logs,
@@ -322,7 +356,7 @@ class SingleLogsView(View):
             return JsonResponse(
                 {
                     "success": True,
-                    "message": "Logs updated successfully",
+                    "message": "Logs create successfully",
                     "total_cbm": container.total_cbm,
                     "total_pieces": container.total_pieces,
                     "net_avg": container.a_navg,
@@ -403,12 +437,10 @@ class FinishedLogsView(View):
             if log_id:
                 fin_logs = FinishedLog.objects.filter(log_id=log_id).values()
                 logs_list = list(fin_logs)
-                logs_list = sorted(logs_list, key=lambda x: x['reference_id'])
+                logs_list = sorted(logs_list, key=lambda x: x["reference_id"])
                 return JsonResponse(logs_list, safe=False)
             else:
-                return JsonResponse(
-                    {"success": False, "error": "No log ID provided"}
-                )
+                return JsonResponse({"success": False, "error": "No log ID provided"})
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
 
@@ -461,7 +493,6 @@ class FinishedLogsList(View):
                 }
                 fin_logs_grouped[key].append(data)
 
-
         fin_logs_grouped_str = {json.dumps(k): v for k, v in fin_logs_grouped.items()}
 
         # Preprocess the data to extract width and thickness
@@ -490,7 +521,9 @@ class DeleteFinishedlogs(View):
                 finished_log.delete()
 
                 # Retrieve all finished logs for the same container ordered by reference_id
-                logs = FinishedLog.objects.filter(log_id=log_id).order_by("reference_id")
+                logs = FinishedLog.objects.filter(log_id=log_id).order_by(
+                    "reference_id"
+                )
 
                 # Reset the reference_id for each log starting from 1
                 for index, log_entry in enumerate(logs, start=1):
@@ -504,6 +537,179 @@ class DeleteFinishedlogs(View):
                 )
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
+
+
+class SaleOrderCreateView(View):
+    """
+    View for creating sale orders.
+
+    This view handles the creation of sale orders based on the data received.
+    """
+
+    def get(self, request):
+        """
+        Handle GET request to render sale order form.
+        """
+        form = SaleOrderlineForm()
+        return render(request, "saleorder.html", {"form": form})
+
+    def post(self, request):
+        """
+        Handle POST request to create sale orders.
+        """
+        try:
+            data = request.POST.get("sale_order")
+            if not data:
+                return JsonResponse(
+                    {"success": False, "error": "No sale order data received"},
+                    status=400,
+                )
+
+            sale_order_list = json.loads(data)
+
+            for item in sale_order_list:
+                width = item.get("width")
+                thickness = item.get("thickness")
+                length = item.get("length")
+                quantity = int(item.get("quantity"))
+
+                f_count = FinishedLog.objects.filter(
+                    width=width, thickness=thickness, length=length
+                ).count()
+
+                if SaleOrderline.objects.filter(
+                    width=width, thickness=thickness, length=length
+                ).exists():
+                    sale_orderlines = (
+                        SaleOrderline.objects.filter(
+                            width=width, thickness=thickness, length=length
+                        ).aggregate(total_quantity=Sum("quantity"))["total_quantity"]
+                        or 0
+                    )
+
+                    if sale_orderlines >= f_count:
+                        return JsonResponse(
+                            {
+                                "success": False,
+                                "message": f"Requested sale quantity {quantity} is not available",
+                            },
+                            status=400,
+                        )
+
+                    if sale_orderlines:
+                        avlb = f_count - sale_orderlines
+                        if quantity > avlb:
+                            return JsonResponse(
+                                {
+                                    "success": False,
+                                    "message": f"Requested sale quantity {quantity} is not available",
+                                },
+                                status=400,
+                            )
+
+                if quantity > f_count:
+                    return JsonResponse(
+                        {
+                            "success": False,
+                            "message": f"Requested sale quantity {quantity} is not available",
+                        },
+                        status=400,
+                    )
+
+                sale_order_line = SaleOrderline.objects.create(
+                    width=width,
+                    thickness=thickness,
+                    length=length,
+                    quantity=quantity,
+                )
+
+                SaleOrder.objects.create(orderline=sale_order_line)
+
+            return JsonResponse({"success": True})
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"success": False, "error": "Invalid JSON format in sale order data"},
+                status=400,
+            )
+
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)}, status=500)
+
+
+class SaleReportView(View):
+    """
+    View for generating and displaying sale reports.
+
+    This view retrieves sale order data and renders a sale report template.
+    """
+
+    def get(self, request):
+        """
+        Handle GET request to generate and display sale report.
+        """
+        try:
+            sale_orders = SaleOrder.objects.all().values(
+                "sale_date",
+                "orderline__width",
+                "orderline__thickness",
+                "orderline__length",
+                "orderline__quantity",
+            )
+
+            sale_order_list = list(sale_orders)
+            return render(request, "salereport.html", {"sale_order": sale_order_list})
+
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+
+class StockListView(View):
+    """
+    View for displaying stock report.
+
+    This view retrieves stock data and renders a stock report template.
+    """
+
+    def get(self, request):
+        """
+        Handle GET request to generate and display stock report.
+
+        """
+        stock_list = []
+
+        finishedlog = FinishedLog.objects.values(
+            "width", "thickness", "length"
+        ).distinct()
+
+        for f_log in finishedlog:
+            width = f_log["width"]
+            thickness = f_log["thickness"]
+            length = f_log["length"]
+            log_count = FinishedLog.objects.filter(
+                width=width, thickness=thickness, length=length
+            ).count()
+            if SaleOrderline.objects.filter(
+                width=width, thickness=thickness, length=length
+            ).exists():
+                sale_orderlines = SaleOrderline.objects.filter(
+                    width=width, thickness=thickness, length=length
+                ).aggregate(total_quantity=Sum("quantity"))
+
+                available_log = log_count - sale_orderlines["total_quantity"]
+
+            else:
+                available_log = log_count
+
+            data = {
+                "width": width,
+                "thickness": thickness,
+                "length": length,
+                "available_log": available_log,
+            }
+            stock_list.append(data)
+
+        return render(request, "stockreport.html", {"stock_list": stock_list})
 
 
 class SignupView(FormView):

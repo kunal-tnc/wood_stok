@@ -61,18 +61,20 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th style="color: #000;" scope="col">S No.</th>
-                                                                    <th style="color: #000;" scope="col">Length</th>
+
                                                                     <th style="color: #000;" scope="col">Width</th>
                                                                     <th style="color: #000;" scope="col">Thickness</th>
+                                                                    <th style="color: #000;" scope="col">Length</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 {% for log in logs %}
                                                                     <tr>
                                                                         <td style="color: #000;">{{ forloop.counter }}</td>
-                                                                        <td style="color: #000;">{{ log.length }}</td>
+
                                                                         <td style="color: #000;">{{ log.width }}</td>
                                                                         <td style="color: #000;">{{ log.thickness }}</td>
+                                                                        <td style="color: #000;">{{ log.length }}</td>
                                                                     </tr>
                                                                 {% empty %}
                                                                     <tr>

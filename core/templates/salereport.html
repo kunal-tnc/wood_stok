@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="main-panel">
+    <div class="content">
+        <div class="container-fluid">
+            <h4 class="page-title">Sale Report</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="font-weight: bold; color: #000;">S No.</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Date</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Width</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Thickness</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Length</th>
+                                            <th scope="col" style="font-weight: bold; color: #000;">Quantity</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for sale in sale_order %}
+                                        <tr>
+                                            <td style="color: #000;">{{ forloop.counter }}</td>
+                                            <td style="color: #000;">{{ sale.sale_date }}</td>
+                                            <td style="color: #000;">{{ sale.orderline__width }}</td>
+                                            <td style="color: #000;">{{ sale.orderline__thickness }}</td>
+                                            <td style="color: #000;">{{ sale.orderline__length }}</td>
+                                            <td style="color: #000;">{{ sale.orderline__quantity }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

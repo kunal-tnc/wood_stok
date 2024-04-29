@@ -24,8 +24,20 @@ class LogForm(forms.ModelForm):
 
 
 class FinishedLogForm(forms.ModelForm):
+    """
+    Form for creating or updating a FinishedLog instance.
+    """
     class Meta:
         model = FinishedLog
+        fields = "__all__"
+
+
+class SaleOrderlineForm(forms.ModelForm):
+    """
+       Form for creating or updating a SaleOrderline instance.
+    """
+    class Meta:
+        model = SaleOrderline
         fields = "__all__"
 
 

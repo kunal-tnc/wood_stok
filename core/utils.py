@@ -1,4 +1,14 @@
 def group_by_combination(finished_log, seen_combinations):
+    """
+    Groups finished logs by width and thickness combinations.
+
+    Parameters:
+    - finished_log (QuerySet): Queryset of FinishedLog objects.
+    - seen_combinations (list of tuples): List of tuples representing seen width and thickness combinations.
+
+    Returns:
+    - dict: Dictionary where keys are width and thickness combinations and values are lists of logs.
+    """
     products_by_combination = {}
 
     for combination in seen_combinations:

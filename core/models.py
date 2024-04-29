@@ -31,6 +31,12 @@ def calculate_all_totals_and_net_avg(logs):
 
 
 class Vendor(models.Model):
+    """
+    Model representing a vendor.
+
+    Attributes:
+    - name (CharField): The name of the vendor.
+    """
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -38,9 +44,28 @@ class Vendor(models.Model):
 
 
 class Container(models.Model):
+    """
+    Model representing a container.
+
+    Attributes:
+    - container_number (CharField): The unique identifier of the container.
+    - pieces (IntegerField): The number of pieces in the container.
+    - ncbm (DecimalField): The net cubic meters of the container.
+    - navg (DecimalField): The net average of the container.
+    - rate (IntegerField): The rate of the container.
+    - amount (CharField): The amount of the container.
+    - vendor (ForeignKey): The vendor associated with the container.
+    - total_pieces (IntegerField): The total number of pieces in the container.
+    - total_cbm (DecimalField): The total cubic meters of the container.
+    - a_navg (DecimalField): The average net average of the container.
+    - sort_axis_pieces (IntegerField): The sorting axis for pieces.
+    - sort_axis_cbm (DecimalField): The sorting axis for cubic meters.
+    - sort_axis_navg (DecimalField): The sorting axis for net average.
+    - status (CharField): The status of the container (Locked or Draft).
+    """
     STATUS_CHOICES = [
-        ('lock', 'Locked'),
-        ('draft', 'Draft'),
+        ("lock", "Locked"),
+        ("draft", "Draft"),
     ]
     container_number = models.CharField(max_length=50, unique=True)
     pieces = models.IntegerField(default=0)
@@ -64,7 +89,8 @@ class Container(models.Model):
     sort_axis_navg = models.DecimalField(
         max_digits=20, decimal_places=3, default=0, null=True, blank=True
     )
-    status = models.CharField(max_length=5, choices=STATUS_CHOICES, default='draft')
+    status = models.CharField(max_length=5, choices=STATUS_CHOICES, default="draft")
+
     def __str__(self):
         return self.container_number
 
@@ -89,6 +115,17 @@ class Container(models.Model):
 
 
 class Log(models.Model):
+    """
+    Model representing a log.
+
+    Attributes:
+    - container (ForeignKey): The container associated with the log.
+    - length (CharField): The length of the log.
+    - girth (CharField): The girth of the log.
+    - cft (DecimalField): The cubic feet of the log.
+    - cbm (DecimalField): The cubic meters of the log.
+    - reference_id (IntegerField): The reference ID of the log.
+    """
     container = models.ForeignKey(
         Container, on_delete=models.CASCADE, related_name="logs"
     )
@@ -107,6 +144,17 @@ class Log(models.Model):
 
 
 class FinishedLog(models.Model):
+    """
+    Model representing a finished log.
+
+    Attributes:
+    - log (ForeignKey): The log associated with the finished log.
+    - length (CharField): The length of the finished log.
+    - width (CharField): The width of the finished log.
+    - thickness (CharField): The thickness of the finished log.
+    - cft (DecimalField): The cubic feet of the finished log.
+    - reference_id (IntegerField): The reference ID of the finished log.
+    """
     log = models.ForeignKey(Log, on_delete=models.CASCADE)
     length = models.CharField(max_length=20, default=0, null=True, blank=True)
     width = models.CharField(max_length=20, default=0, null=True, blank=True)
@@ -118,3 +166,37 @@ class FinishedLog(models.Model):
 
     def __str__(self):
         return f"Log: {self.log.id}, FinishedLog id: {self.id}, length:{self.length}, width:{self.width}, thickness:{self.thickness}"
+
+
+class SaleOrderline(models.Model):
+    """
+    Model representing a sale order line.
+
+    Attributes:
+    - width (CharField): The width of the sale order line.
+    - thickness (CharField): The thickness of the sale order line.
+    - length (CharField): The length of the sale order line.
+    - quantity (IntegerField): The quantity of the sale order line.
+    """
+    width = models.CharField(max_length=20)
+    thickness = models.CharField(max_length=20)
+    length = models.CharField(max_length=20, default=0, null=True, blank=True)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return f"width:{self.width}, thickness:{self.thickness}, length:{self.length}, quantity:{self.quantity}"
+
+
+class SaleOrder(models.Model):
+    """
+    Model representing a sale order.
+
+    Attributes:
+    - orderline (ForeignKey): The sale order line associated with the sale order.
+    - sale_date (DateField): The date of the sale order.
+    """
+    orderline = models.ForeignKey(SaleOrderline, on_delete=models.CASCADE)
+    sale_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Sale Order - {self.sale_date}"

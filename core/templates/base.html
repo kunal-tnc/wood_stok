@@ -102,6 +102,25 @@
 								<p style="color: dark;">Finished Logs</p>
 							</a>
 						</li>
+						<li class="nav-item" id="saleorder">
+							<a href="/api/saleorder/" onclick="setActive('saleorder')">
+								<i class="la la-line-chart"></i>
+								<p style="color: dark;">Sales</p>
+							</a>
+						</li>
+						<li class="nav-item" id="salereport">
+							<a href="/salereport/" onclick="setActive('salereport')">
+								<i class="la la-bar-chart"></i>
+								<p style="color: dark;">Sales Report</p>
+							</a>
+						</li>
+						<li class="nav-item" id="stockreport">
+							<a href="/stock/" onclick="setActive('stockreport')">
+								<i class="la la-area-chart"></i>
+								<p style="color: dark;">Stock Report</p>
+							</a>
+						</li>
+
 					</ul>
 
 				</div>
@@ -167,6 +186,14 @@ $("#mylogTable").dataTable({
             activeId = 'logs';
         } else if (path === '/finishedlogs/') {
             activeId = 'finishedlogs';
+        }else if (path === '/api/saleorder/') {
+            activeId = 'saleorder';
+        }
+        else if (path === '/salereport/') {
+            activeId = 'salereport';
+        }
+        else if (path === '/stock/') {
+            activeId = 'stockreport';
         }
         setActive(activeId);
     };

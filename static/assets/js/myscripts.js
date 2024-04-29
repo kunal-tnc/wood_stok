@@ -136,17 +136,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    bootbox.alert('Data Update Successfully');
-
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Data Update Successfully',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
                 } else {
-                    console.error('Failed to send data to log_update');
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to send data to log_update',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 }
             } catch (error) {
-                console.error('Error sending data to log_update:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error sending data to log_update: ' + error,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
         });
-    } else {
-        console.error('Element with ID "save-table-data" not found');
     }
 });
 
@@ -301,21 +313,33 @@ $(document).ready(function() {
             container: cont_id,
             success: function(response) {
                 if (response.success) {
-                    bootbox.alert({
-                        message: response.message,
-                        callback: function() {
-                            $('#newLogModal').modal('hide');
-                            location.reload();
-                        }
-                    });
+                Swal.fire({
+                    title: 'Success',
+                    text: response.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(function() {
+                    $('#newLogModal').modal('hide');
+                    location.reload();
+                });
                 } else {
-                    bootbox.alert('Error: ' + response.errors);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-                bootbox.alert('Error: ' + xhr.responseText);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error: ' + response.error,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
+        },
+            error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            Swal.fire({
+                title: 'Error',
+                text: 'Error: ' + xhr.responseText,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
         });
     });
 
@@ -433,9 +457,9 @@ $(document).ready(function() {
                                                 <tr>
                                                     <th style="color: #000;">Log No</th>
                                                     <th style="color: #000;">Finished Log No</th>
-                                                    <th style="color: #000;">Length</th>
                                                     <th style="color: #000;">Width</th>
                                                     <th style="color: #000;">Thickness</th>
+                                                    <th style="color: #000;">Length</th>
                                                     <th style="color: #000;">CFT</th>
                                                 </tr>
                                             </thead>
@@ -444,9 +468,9 @@ $(document).ready(function() {
                                                     <tr>
                                                         <td style="color: #000;">${log.log_no}</td>
                                                         <td style="color: #000;">${log.finished_log_no}</td>
-                                                        <td style="color: #000;">${log.length}</td>
                                                         <td style="color: #000;">${log.width}</td>
                                                         <td style="color: #000;">${log.thickness}</td>
+                                                        <td style="color: #000;">${log.length}</td>
                                                         <td style="color: #000;">${log.cft}</td>
                                                     </tr>
                                                 `).join('')}
@@ -525,25 +549,25 @@ $(document).on('click', '#lock-button', function(){
                 });
             } else {
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Failed to lock container',
-                    text: response.error
+                    title: 'Error',
+                    text: 'Error: ' + response.error,
+                    icon: 'error'
                 });
             }
         },
         error: function(xhr, textStatus, errorThrown) {
             console.error('Failed to lock container:', errorThrown);
             Swal.fire({
-                icon: 'error',
-                title: 'Failed to lock container',
-                text: 'An error occurred while trying to lock the container.'
+                title: 'Error',
+                text: 'Error: ' + xhr.responseText,
+                icon: 'error'
             });
         }
     });
 });
 
 $('#submit-button').click(function(event) {
-    // Show SweetAlert message
+
     Swal.fire({
         icon: 'success',
         title: 'Container Successfully',
@@ -574,3 +598,112 @@ function printDiv(divId) {
 
     document.body.innerHTML = originalContents;
 }
+
+
+//  14th scripted started
+var Sale_count = 0;
+
+    $(document).on('click', '#add-more-order', function() {
+        Sale_count += 1;
+        var newRow = `
+            <tr>
+                <td><input type="number" class="form-control sale-width" name="width" id="${Sale_count}_width" min="0" step=".01" required></td>
+                <td><input type="number" class="form-control sale-thickness" name="thickness" id="${Sale_count}_thickness" min="0" step=".01" required></td>
+                <td><input type="number" class="form-control sale-length" name="length" id="${Sale_count}_length" min="0" step=".01" required></td>
+                <td><input type="number" class="form-control sale-quantity" name="quantity" id="${Sale_count}_quantity" min="0" required></td>
+                <td><a href="#" class="remove-row">Remove</a></td>
+            </tr>
+        `;
+        $("#add-more-order-tr").before(newRow);
+    });
+
+    $(document).on('click', '.remove-row', function(e) {
+        e.preventDefault();
+        Sale_count -= 1;
+        $(this).closest('tr').remove();
+    });
+
+
+$(document).on('click', '#submit_sale', function(e) {
+    e.preventDefault();
+
+    var sale_order = [];
+
+    // Flag to track if any value is less than zero
+    var isValid = true;
+
+    for (var i = 0; i <= Sale_count; i++) {
+        var s_width = document.getElementById(`${i}_width`);
+        var s_thickness = document.getElementById(`${i}_thickness`);
+        var s_length = document.getElementById(`${i}_length`);
+        var s_quantity = document.getElementById(`${i}_quantity`);
+
+        // Check if all elements exist
+        if (s_width && s_thickness && s_length && s_quantity) {
+            // Check if values are positive
+            if (s_width.value >= 0 && s_thickness.value >= 0 && s_length.value >= 0 && s_quantity.value >= 0) {
+                var saleorder_dict = {
+                    'width': s_width.value,
+                    'thickness': s_thickness.value,
+                    'length': s_length.value,
+                    'quantity': s_quantity.value
+                };
+                sale_order.push(saleorder_dict);
+            } else {
+                isValid = false;
+                console.error(`One or more input values are negative for Sale ${i}`);
+            }
+        } else {
+            isValid = false;
+            console.error(`One or more elements with ID ${i}_width, ${i}_thickness, ${i}_length, or ${i}_quantity not found.`);
+        }
+    }
+
+    // Check if any value is less than zero
+    if (!isValid) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'One or more input values are negative. Please enter valid positive values.'
+        });
+        return; // Stop further processing
+    }
+
+    console.log("Sale order:", sale_order);
+
+    // Proceed with AJAX request
+    $.ajax({
+        url: '/api/saleorder/',
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
+        data: { sale_order: JSON.stringify(sale_order) },
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Sale order submitted successfully!'
+                }).then(function() {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message
+                }).then(function() {
+                    window.location.reload();
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Error: ' + xhr.responseText,
+                icon: 'error',
+            });
+        }
+    });
+});
